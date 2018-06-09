@@ -1,11 +1,15 @@
 import {JsonController, Param, Body, Get, Post, Put, Delete, HeaderParam} from "routing-controllers";
+import { Container } from "../Container";
 
 @JsonController()
 class BookmarksController {
+    constructor(private container: Container) {
+
+    }
     
     @Get("/bookmarks")
-    getAll(@HeaderParam("token") token: string) {
-        return `The token is ${token}`;
+    getAll(@HeaderParam("userid") userid: string) {
+        ;
     }
 }
 

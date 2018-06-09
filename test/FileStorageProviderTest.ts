@@ -10,9 +10,10 @@ class FileStorageProviderTest {
         const content: string = "sfldgkdfkhewlfkmd";
         const provider = new FileStorageProvider("./testdata/");
         const userId = uuid();
+        const collectionId = uuid();
         
-        await provider.saveSerializedBookmarkCollectionAsync(userId, content);
-        const retrievedContent = await provider.getSerializedBookmarkCollectionAsync(userId);
+        await provider.saveSerializedBookmarkCollectionAsync(userId, collectionId, content);
+        const retrievedContent = await provider.getSerializedBookmarkCollectionAsync(userId, collectionId);
 
         should(retrievedContent).equal(content);
     }

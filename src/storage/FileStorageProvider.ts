@@ -4,13 +4,20 @@ import fs from "fs";
 import path from "path";
 
 class FileStorageProvider implements IStorageProvider {
-    private getFilename(userId: string) {
-        return path.join(this.folder, `${userId}.json`);
+    private getUserFolder(userId: string) {
+        return path.join(this.folder, userId);
     }
 
-    getSerializedBookmarkCollectionAsync(userId: string): Promise<string> {
-        const filename = this.getFilename(userId);
+    private getFilename(userId: string, collectionId: string) {
+        return path.join(this.getUserFolder(userId), `${collectionId}.json`);
+    }
+
+    getSerializedBookmarkCollectionAsync(userId: string, collectionId: string): Promise<string> {
+        const filename = this.getFilename(userId, collectionId);
         return new Promise<string>((resolve, reject) => {
+            if (!fs.existsSync(filename)) {
+                return reject(`File doesn't exist: ${filename}`);
+            }
             fs.readFile(filename, (err, data) => {
                 if (err) {
                     reject(err);
@@ -20,15 +27,21 @@ class FileStorageProvider implements IStorageProvider {
             });
         }) 
     }
-    async saveSerializedBookmarkCollectionAsync(userId: string, serializedBookmarkCollection: string): Promise<void> {
-        const filename = this.getFilename(userId);
+
+    private createUserFolderIfNotExist(userId: string): void {
+        const userFolder = this.getUserFolder(userId);
+        if (!fs.existsSync(userFolder)) {
+            fs.mkdirSync(userFolder);
+        }
+    }
+
+    async saveSerializedBookmarkCollectionAsync(userId: string, collectionId: string, serializedBookmarkCollection: string): Promise<void> {
+        const filename = this.getFilename(userId, collectionId);
         return new Promise<void>((resolve, reject) => {
-            if (!fs.existsSync(this.folder)) {
-                try {
-                    fs.mkdirSync(this.folder);
-                } catch (err) {
-                    return reject(err);
-                }
+            try {            
+                this.createUserFolderIfNotExist(userId);
+            } catch (err) {
+                return reject(err);
             }
             fs.writeFile(filename, serializedBookmarkCollection, (error) => {
                 if (error) {
