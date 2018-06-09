@@ -4,12 +4,24 @@ import fs from "fs";
 import path from "path";
 
 class FileStorageProvider implements IStorageProvider {
+    async getBookmarkCollectionIdListAsync(userId: string): Promise<string[]> {
+        const userFolder = this.getUserFolder(userId);
+        if (!fs.existsSync(userFolder)) {
+            return Promise.reject(`Folder doesn't exist: ${userId}`);
+        }
+        const files = fs.readdirSync(userFolder);
+        const collectionIds = files
+            .filter(filename => filename.match(/collection-[^.]+.json/))
+            .map(filename => filename.replace("collection-", "").replace(".json", ""));
+        return collectionIds;
+    }
+
     private getUserFolder(userId: string) {
         return path.join(this.folder, userId);
     }
 
     private getFilename(userId: string, collectionId: string) {
-        return path.join(this.getUserFolder(userId), `${collectionId}.json`);
+        return path.join(this.getUserFolder(userId), `collection-${collectionId}.json`);
     }
 
     getSerializedBookmarkCollectionAsync(userId: string, collectionId: string): Promise<string> {

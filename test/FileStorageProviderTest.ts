@@ -17,4 +17,19 @@ class FileStorageProviderTest {
 
         should(retrievedContent).equal(content);
     }
+
+    @test("should list collection ids in user")
+    async getCollectionIds() {
+        const userId = uuid();
+        const collectionIds: string[] = [uuid(), uuid(), uuid()];
+        const provider = new FileStorageProvider("./testdata/");
+        for(const collectionId in collectionIds) {
+            await provider.saveSerializedBookmarkCollectionAsync(userId, collectionId, "sdfgkgoe");        
+        }
+        const retrievedIds = await provider.getBookmarkCollectionIdListAsync(userId);
+        should(retrievedIds).have.length(collectionIds.length);
+        for(const collectionId in collectionIds) {
+            should(retrievedIds).containEql(collectionId);
+        }
+    }
 }
