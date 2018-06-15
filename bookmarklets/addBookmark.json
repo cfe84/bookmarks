@@ -1,0 +1,13 @@
+{
+    "name": "addBookmark",
+    "html": "ui/addBookmark.html",
+    "stylesheets": [
+        "style/w3.css",
+        "style/w3-theme-blue.css",
+        "style/base.css"
+    ],
+    "scripts": [
+        "scripts/addBookmark.js"
+    ],
+    "output": "output/addBookmark.txt"
+}

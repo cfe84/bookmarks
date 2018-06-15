@@ -1,35 +1,112 @@
-import { suite, test, slow, timeout } from "mocha-typescript";
+import { suite, test,  } from "mocha-typescript";
 import should from "should";
 import { FileStorageProvider } from "../src/storage/FileStorageProvider";
+import { Folder } from "../src/models/Folder";
+import fs from "fs";
+import { Bookmark } from "../src/models/Bookmark";
 const uuid = require("uuid/v4");
 
 @suite
 class FileStorageProviderTest {
-    @test("should open the file it just saved")
-    async saveAndOpen() {
-        const content: string = "sfldgkdfkhewlfkmd";
-        const provider = new FileStorageProvider("./testdata/");
-        const userId = uuid();
-        const collectionId = uuid();
-        
-        await provider.saveSerializedBookmarkCollectionAsync(userId, collectionId, content);
-        const retrievedContent = await provider.getSerializedBookmarkCollectionAsync(userId, collectionId);
+    private testFolder: string = "./testData";
+    private testFolderName: string = "Folder Name";
+    private testDescription: string = "Description";
 
-        should(retrievedContent).equal(content);
+    public before() {
+        if (!fs.existsSync(this.testFolder)) {
+            fs.mkdirSync(this.testFolder);
+        }
     }
 
-    @test("should list collection ids in user")
-    async getCollectionIds() {
+    @test("should save and open a sub-folder")
+    async saveAndOpenFolder() {
+        const provider = new FileStorageProvider(this.testFolder);
         const userId = uuid();
-        const collectionIds: string[] = [uuid(), uuid(), uuid()];
-        const provider = new FileStorageProvider("./testdata/");
-        for(const collectionId in collectionIds) {
-            await provider.saveSerializedBookmarkCollectionAsync(userId, collectionId, "sdfgkgoe");        
-        }
-        const retrievedIds = await provider.getBookmarkCollectionIdListAsync(userId);
-        should(retrievedIds).have.length(collectionIds.length);
-        for(const collectionId in collectionIds) {
-            should(retrievedIds).containEql(collectionId);
-        }
+        const folder = new Folder(this.testFolderName);
+        folder.description = this.testDescription;
+        folder.bookmarkIds = [uuid(), uuid()];
+        folder.folderIds = [uuid(), uuid()];
+        await provider.saveFolderAsync(userId, folder);
+        const retrieved = await provider.getFolderAsync(userId, folder.id);
+        should(retrieved.bookmarkIds).deepEqual(folder.bookmarkIds);
+        should(retrieved.folderIds).deepEqual(folder.folderIds);
+        should(retrieved.name).equal(this.testFolderName);
+        should(retrieved.description).equal(this.testDescription);
+    }
+
+    @test("should save and open a bookmark")
+    async saveAndOpenBookmark() {
+        const provider = new FileStorageProvider(this.testFolder);
+        const userId = uuid();
+        const folderId = uuid();
+        const bookmark = new Bookmark(this.testFolderName, "href");
+        bookmark.keyword = "Keyword";
+        bookmark.tags = ["tag1", "tag2"];
+        bookmark.description = this.testDescription;
+
+        await provider.saveBookmarkAsync(userId, bookmark);
+        const retrieved = await provider.getBookmarkAsync(userId, bookmark.id);
+        should(retrieved.name).equal(bookmark.name);
+        should(retrieved.href).equal(bookmark.href);
+        should(retrieved.tags).deepEqual(bookmark.tags);
+        should(retrieved.description).equal(this.testDescription);
+    }
+
+    @test("should save and list sub folders")
+    async saveAndListFolders() {
+        const provider = new FileStorageProvider(this.testFolder);
+        const userId = uuid();
+        const folderId = uuid();
+        const folder = new Folder(this.testFolderName);
+        folder.folderIds = [uuid(), uuid()];
+        
+    }
+
+    @test("should save and list bookmarks")
+    async saveAndListBookmarks() {
+        
+        const userId = uuid();
+        const folder = new Folder(this.testFolderName);
+        const bookmark1 = new Bookmark("name 1", "href 1");
+        const bookmark2 = new Bookmark("name 2", "bookmark 2");
+        folder.bookmarkIds = [bookmark1.id, bookmark2.id];
+
+        const provider = new FileStorageProvider(this.testFolder);
+        await provider.saveBookmarkAsync(userId, bookmark1);
+        await provider.saveBookmarkAsync(userId, bookmark2);
+        await provider.saveFolderAsync(userId, folder);
+
+        const bookmarks = await provider.getBookmarksAsync(userId, folder.id);
+        should(bookmarks).have.length(2);
+        should(bookmarks[0]).deepEqual(bookmark1);
+        should(bookmarks[1]).deepEqual(bookmark2);
+    }
+
+    @test("should delete bookmarks and not list them")
+    async deleteBookmarks() {
+        const provider = new FileStorageProvider(this.testFolder);
+        const userId = uuid();
+        const folderId = uuid();
+        const bookmark = new Bookmark(this.testFolderName, "href");
+
+        await provider.saveBookmarkAsync(userId, bookmark);
+        const retrieved = await provider.getBookmarkAsync(userId, bookmark.id);
+        should(retrieved.name).equal(bookmark.name);
+        await provider.deleteBookmarkAsync(userId, bookmark);
+        should(provider.getBookmarkAsync(userId, bookmark.id))
+            .be.rejectedWith("Bookmark not found");
+    }
+
+    @test("should delete and not list folder")
+    async deleteFolders() {
+        const provider = new FileStorageProvider(this.testFolder);
+        const userId = uuid();
+        const folder = new Folder(this.testFolderName);
+        await provider.saveFolderAsync(userId, folder);
+        const retrieved = await provider.getFolderAsync(userId, folder.id);
+        should(retrieved.name).equal(this.testFolderName);
+        await provider.deleteFolderAsync(userId, folder);
+        should(provider.getFolderAsync(userId, folder.id))
+            .be.rejectedWith("Folder not found");
     }
 }

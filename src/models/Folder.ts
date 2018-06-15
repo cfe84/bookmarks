@@ -4,8 +4,8 @@ const uuid = require("uuid/v4");
 
 class Folder implements IItem{
     public id: string = uuid();
-    public bookmarks: Array<Bookmark> = new Array<Bookmark>();
-    public folders: Array<Folder> = new Array<Folder>();
+    public bookmarkIds: Array<string> = new Array<string>();
+    public folderIds: Array<string> = new Array<string>();
     public description: string = "";
     constructor(public name: string = "") { }
 }
