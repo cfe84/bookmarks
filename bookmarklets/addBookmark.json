@@ -6,8 +6,11 @@
         "style/w3-theme-blue.css",
         "style/base.css"
     ],
-    "scripts": [
-        "scripts/addBookmark.js"
+    "beforeScripts": [
+        "scripts/addBookmarkBefore.js"
+    ],
+    "afterScripts": [
+        "scripts/addBookmarkAfter.js"
     ],
     "output": "output/addBookmark.txt"
 }

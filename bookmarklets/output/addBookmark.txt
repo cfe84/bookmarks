@@ -1,4 +1,4 @@
-javascript:(function(){const%20html="<style>
+javascript:(function(){getEncodedValue = (fieldId) => encodeURIComponent(document.getElementById(fieldId).value);  saveBookmark = () => {     const name = getEncodedValue("bookmark-name");     const href = getEncodedValue("bookmark-href");     const url = `http://localhost:8080/?action=addBookmark&name=${name}&href=${href}`;     window.open(url); };  loadBookmarkFields = () => {     const name = document.title;     const href = document.location.href;     document.getElementById("bookmark-name").value = name;     document.getElementById("bookmark-href").value = href; } ;const%20html="<style>
 ﻿/* W3.CSS 4.08 January 2018 by Jan Egil and Borge Refsnes */
 html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
 /* Extract from normalize.css by Nicolas Gallagher and Jonathan Neal git.io/normalize */
@@ -266,27 +266,50 @@ bookmark-background {
     background: #1194ff;
 }
 </style>
-<div class=\"w3-modal\" style=\"display:block\">
-    <div class=\"w3-modal-content w3-card-4\">
-        <div class=\"w3-bar w3-theme-d2\">
-            <div class=\"w3-bar-item w3-left w3-half\"><h3 class=\"w3-h3 w3-white\">Add a bookmark</h3></div>
-            <div class=\"w3-bar-item w3-right w3-half\"><span class=\"w3-button w3-xlarge w3-right w3-hover-red\" id=\"bookmark-btn-closemodal\">X</span></div>
-        </div>
-        <div class=\"w3-white w3-padding\">
-            <p>
-                <label class=\"w3-text-grey\">Title</label>
-                <input id=\"bookmark-txt-title\" class=\"w3-input\" type=\"text\">
-            </p>   
-            <p>
-                <label class=\"w3-text-grey\">Url</label>
-                <input id=\"bookmark-txt-url\" class=\"w3-input\" type=\"text\">
-            </p>
-            <p>
-                <button id=\"bookmark-btn-addBookmark\" class=\"w3-btn w3-padding w3-theme-d2\">Add Bookmark</button>
-            </p>
+
+
+<div id=\"modal\" class=\"w3-clear w3-modal\" style=\"display: block\">
+    <div style=\"top: 0; left: calc(50% - 200px); position: fixed; max-width: 400px\" class=\"w3-modal-content w3-card-4 w3-animate-top\">
+        <div style=\"margin:auto\">
+            <div class=\"w3-container w3-theme-d2\">
+                <h3>Add bookmark</h3>
+            </div>
+            <div class=\"w3-container w3-card-4 w3-white\">
+                <p>
+                    <label class=\"w3-text-grey\">Name</label>
+                    <input id=\"bookmark-name\" type=\"text\" class=\"w3-input\"/>
+                </p>
+                <p>
+                    <label class=\"w3-text-grey\">HREF</label>
+                    <input id=\"bookmark-href\" type=\"text\" class=\"w3-input\"/>
+                </p>
+                <p>
+                    <label class=\"w3-text-grey\">Folder</label>
+                    <select class=\"w3-select\">
+                    
+                    </select>
+                </p>
+                <p>
+                    <label class=\"w3-text-grey\">Description</label>
+                    <input type=\"text\" class=\"w3-input\"/>
+                </p>
+                <p>
+                    <label class=\"w3-text-grey\">Shortcut</label>
+                    <input type=\"text\" class=\"w3-input\"/>
+                </p>
+                <p>
+                    <label class=\"w3-text-grey\">Keywords (Separated by comma)</label>
+                    <input type=\"text\" class=\"w3-input\"/>
+                </p>
+                <p>
+                    <button class=\"w3-btn w3-padding w3-theme-d2\" onclick=\"saveBookmark();\"><i class=\"fa fa-save\"></i>&nbsp;Save</button>
+                    <button class=\"w3-btn w3-padding w3-theme-d2\" v-on:click=\"closeModal\"><i class=\"fa fa-times\"></i>&nbsp;Close</button>
+                </p>
+            </div>
         </div>
     </div>
 </div>";
 const%20div%20=%20document.createElement("div");div.id='bookmark-div-injected';
 div.innerHTML=html;document.lastElementChild.appendChild(div);
-function addBookmark_onLoad() {     const title = window.document.title;     const url = window.location.href;      document.getElementById("bookmark-txt-title").value = title;     document.getElementById("bookmark-txt-url").value = url;     document.getElementById("bookmark-btn-addBookmark").onclick = () => {         alert("Adding!");     }     document.getElementById("bookmark-btn-closemodal").onclick = () => {         const div = document.getElementById("bookmark-div-injected");         div.parentNode.removeChild(div);     } }  addBookmark_onLoad();})()
+ loadBookmarkFields();;
+})()

@@ -1,7 +1,14 @@
+function launchBookmark(href) {
+    window.open(href);
+}
+
 Vue.component("list-item-bookmark", {
     props: ["bookmark"],
+    methods: {
+        bookmarkClicked: function() { launchBookmark(this.bookmark.href) },
+    },
     template: '\
-<li class="w3-bar" style="cursor:pointer" v-on:click="$emit(\'bookmark-clicked\', bookmark)">\
+<li class="w3-bar" style="cursor:pointer" v-on:click="bookmarkClicked\">\
     <p>\
         <i class="fa fa-bookmark"></i>\
         {{bookmark.name}}\

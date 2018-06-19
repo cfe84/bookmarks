@@ -10,13 +10,14 @@
         <script src="src/index.js" type="text/javascript"></script>
         <script src="components/body-header.js"></script>
         <script src="components/body-footer.js"></script>
+        <script src="components/container-folder.js"></script>
         <script src="components/sidebar.js"></script>
         <script src="components/list-item-bookmark.js"></script>
         <script src="components/menu-folder.js"></script>
+        <script src="components/modal-add-bookmark.js"></script>
     </head>
     <body style="min-height: 100%">
         <div id="app">
-
         <body-header username="placeholder"></body-header>
         <div id="div-container" class="w3-margin-top" style="min-height: 500px">
             <sidebar 
@@ -27,17 +28,11 @@
                 v-on:home-clicked="homeClicked"
                 v-on:previous-folder-clicked="previousFolderClicked"
                 ></sidebar>
-            <div class="w3-container" id="div-folder" style="margin-left:200px">
-                <menu-folder></menu-folder>
-                <div class="w3-padding"></div>
-                <ul class="w3-ul w3-hoverable">
-                    <list-item-bookmark
-                        v-for="bookmark in bookmarks"
-                        v-bind:bookmark="bookmark"
-                        v-bind:key="bookmark.id"
-                        v-on:bookmark-clicked="bookmarkClicked"
-                    ></list-item-bookmark>
-                </ul>
+            <div class="w3-container" style="margin-left:200px">
+                <container-folder
+                    v-bind:bookmarks="bookmarks"
+                    v-bind:current-folder="currentFolder"
+                ></container-folder>
             </div>
         </div>
             

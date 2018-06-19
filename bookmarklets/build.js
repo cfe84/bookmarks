@@ -25,17 +25,23 @@ const loadAll = (filenames) => filenames
     .map((filename) => loadRelativeFile(filename))
     .join("\n");
 
+const loadScripts = (filenames) => {
+    const contents = loadAll(filenames);
+    return contents.replace(/\r?\n/gm, " ");
+}
+
 const html = loadRelativeFile(template.html);
 const stylesheets = loadAll(template.stylesheets);
-const scripts = loadAll(template.scripts);
 
 let htmlOutput = html.replace("%STYLE%", stylesheets);
 htmlOutput = htmlOutput.replace(/"/g, "\\\"");
-let scriptsOutput = scripts.replace(/\r?\n/gm, " ");
-let output = `javascript:(function(){const%20html="${htmlOutput}";
+let beforeScripts = loadScripts(template.beforeScripts);
+let afterScripts = loadScripts(template.afterScripts);
+let output = `javascript:(function(){${beforeScripts};const%20html="${htmlOutput}";
 const%20div%20=%20document.createElement("div");div.id='bookmark-div-injected';
 div.innerHTML=html;document.lastElementChild.appendChild(div);
-${scriptsOutput}})()`;
+${afterScripts};
+})()`;
 fs.writeFileSync(path.join(relativePath, template.output + ".html"), htmlOutput);
 fs.writeFileSync(path.join(relativePath, template.output), output);
 console.log("Done");

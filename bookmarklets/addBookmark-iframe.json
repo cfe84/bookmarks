@@ -1,0 +1,13 @@
+{
+    "name": "addBookmark-iframe",
+    "html": "ui/addBookmark-iframe.html",
+    "stylesheets": [
+        "style/w3.css",
+        "style/w3-theme-blue.css",
+        "style/base.css"
+    ],
+    "scripts": [
+        
+    ],
+    "output": "output/addBookmark-iframe.txt"
+}

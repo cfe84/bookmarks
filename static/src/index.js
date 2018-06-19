@@ -14,44 +14,43 @@ window.onload = () => {
                 { id: "4", name: "The fourth", href: "https://fourth.com" },
                 { id: "5", name: "The fifth", href: "https://fifth.com" },
             ],
-            currentFolder: { id: "root", name: "Home"},
-            folderStack: []
+            currentFolder: { id: "fake-13948329843", name: "Home"},
+            folderStack: [],
         },
         methods: {
-            folderClicked: function(folder) { openFolder(folder) },
-            bookmarkClicked: function(bookmark) { launchBookmark(bookmark.href) },
+            folderClicked: function(folder) { navigateToFolder(folder) },
             homeClicked: function() { loadRootFolder() },
             previousFolderClicked: function() { loadPreviousFolder() }
         }
     });
 
+    function navigateToFolder(folder) {
+        if (app.currentFolder && app.currentFolder.id !== "fake-13948329843") {
+            app.folderStack.push(app.currentFolder);
+        }
+        openFolder(folder);
+    }
+
     function openFolder(folder) {
-        currentFolder = folder;
-        folderStack.push(folder);
+        
+        app.currentFolder = folder;
         apiOperations.getSubfolders(folder.id)
-            .then(folders => {
-                app.folders = folders
-            });
+            .then(folders => app.folders = folders);
         apiOperations.getBookmarks(folder.id)
-            .then(bookmarks => {
-                app.bookmarks = bookmarks
-            });
+            .then(bookmarks => app.bookmarks = bookmarks);
     }
 
     function loadRootFolder() {  
-        folderStack = [];      
+        app.folderStack = [];      
         apiOperations.getRootFolder()
         .then(rootFolder => openFolder(rootFolder));
     }
 
     function loadPreviousFolder() {
-        folderStack.pop();
-        openFolder(folderStack[folderStack.length - 1]);
+        const previousFolder = app.folderStack.pop();
+        openFolder(previousFolder);
     }
 
-    function launchBookmark(href) {
-        window.open(href);
-    }
 
     loadRootFolder();
 }
