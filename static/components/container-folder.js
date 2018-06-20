@@ -6,11 +6,13 @@ Vue.component("container-folder", {
     },
     data: function () {
         return {
+            bookmark: createBookmark(),
             addBookmarkVisible: false
         }
     },
     computed: {
         addBookmarkModalDisplay: function() {
+            this.bookmark = createBookmark();
             return this.addBookmarkVisible ? 'block' : 'none'
         }
     },
@@ -19,6 +21,8 @@ Vue.component("container-folder", {
 <div>\
     <modal-add-bookmark\
         v-bind:style="{display: addBookmarkModalDisplay}"\
+        v-bind:folder="currentFolder"\
+        v-bind:bookmark="bookmark"\
         v-on:close-add-bookmark-modal-clicked="closeAddBookmarkModal"\
     ></modal-add-bookmark>\
     <menu-folder\

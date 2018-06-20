@@ -54,3 +54,14 @@ window.onload = () => {
 
     loadRootFolder();
 }
+
+
+function createBookmark() {
+    return {
+        name: "",
+        href: "",
+        description: "",
+        keyword: "",
+        tags: ""
+    };
+}

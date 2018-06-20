@@ -1,7 +1,20 @@
 Vue.component("modal-add-bookmark", {
     methods: {
         closeModal: function() { this.$emit('close-add-bookmark-modal-clicked'); },
-        saveBookmark: function() { alert('saving'); this.closeModal(); },
+        saveBookmark: function() { 
+            this.bookmark.tags = this.bookmark.tags.split(",");
+            apiOperations.putBookmark(this.folder.id, this.bookmark).then(() => {
+                this.closeModal();        
+            });
+        },
+    },
+    props: [
+        "folder", "bookmark"
+    ],
+    data: function() {
+        return {
+            folderId: this.folder.id
+        };
     },
     template: '        \
 <div id="modal" class="w3-modal">\
@@ -12,30 +25,30 @@ Vue.component("modal-add-bookmark", {
             </div>\
             <div class="w3-container w3-card-4 w3-white">\
                 <p>\
-                    <label class="w3-text-grey">HREF</label>\
-                    <input type="text" class="w3-input"/>\
+                    <label class="w3-text-grey">Name</label>\
+                    <input type="text" v-model="bookmark.name" class="w3-input"/>\
                 </p>\
                 <p>\
-                    <label class="w3-text-grey">Name</label>\
-                    <input type="text" class="w3-input"/>\
+                    <label class="w3-text-grey">HREF</label>\
+                    <input type="text" v-model="bookmark.href" class="w3-input"/>\
                 </p>\
                 <p>\
                     <label class="w3-text-grey">Folder</label>\
-                    <select class="w3-select">\
+                    <select class="w3-select" v-model="folderId" >\
                         \
                     </select>\
                 </p>\
                 <p>\
                     <label class="w3-text-grey">Description</label>\
-                    <input type="text" class="w3-input"/>\
+                    <input type="text" class="w3-input" v-model="bookmark.description" />\
                 </p>\
                 <p>\
                     <label class="w3-text-grey">Shortcut</label>\
-                    <input type="text" class="w3-input"/>\
+                    <input type="text" class="w3-input" v-model="bookmark.keyword" />\
                 </p>\
                 <p>\
-                    <label class="w3-text-grey">Keywords (Separated by comma)</label>\
-                    <input type="text" class="w3-input"/>\
+                    <label class="w3-text-grey">Tags (Separated by comma)</label>\
+                    <input type="text" class="w3-input" v-model="bookmark.tags"/>\
                 </p>\
                 <p>\
                     <button class="w3-btn w3-padding w3-theme-d2" v-on:click="saveBookmark"><i class="fa fa-save"></i>&nbsp;Save</button>\

@@ -24,7 +24,6 @@ class FoldersController {
         app.put(`${baseRoute}/:folderId/bookmarks`, mapRoute(this.putBookmark.bind(this)));
         app.get(`${baseRoute}/:folderId/folders`, mapRoute(this.getSubfolders.bind(this)));
         app.put(`${baseRoute}/:folderId/folders`, mapRoute(this.putSubfolder.bind(this)));
-
     }
        
     async getRoot(requestParameters: RequestParameters): Promise<Folder> {
