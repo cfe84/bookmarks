@@ -4,13 +4,13 @@ import {BookmarksController} from "./controllers/BookmarksController";
 import {FoldersController} from "./controllers/FoldersController";
 import expressBody from "body-parser";
 import { Container } from "./Container";
-import { FileStorageProvider } from "./storage/FileStorageProvider";
+import { FileStorageProvider, FsFileProvider } from "./storage";
 import { IStorageProvider } from "./storage/IStorageProvider";
 
 class App {
     app: any;
     constructor() {
-        const storage = new FileStorageProvider("data");
+        const storage = new FileStorageProvider(new FsFileProvider("data"));
         const container = new Container(storage);
         
         Container.set(container);

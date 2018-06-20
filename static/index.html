@@ -13,8 +13,10 @@
         <script src="components/container-folder.js"></script>
         <script src="components/sidebar.js"></script>
         <script src="components/list-item-bookmark.js"></script>
+        <script src="components/list-item-folder.js"></script>
         <script src="components/menu-folder.js"></script>
         <script src="components/modal-add-bookmark.js"></script>
+        <script src="components/modal-select-folder.js"></script>
         <script src="components/browser-folders.js"></script>
     </head>
     <body style="min-height: 100%">
@@ -22,13 +24,8 @@
         <body-header username="placeholder"></body-header>
         <div id="div-container" class="w3-margin-top" style="min-height: 500px">
             <sidebar 
-                v-bind:current-folder="currentFolder" 
-                v-bind:folders="folders"
-                v-bind:folder-stack="folderStack"
                 v-on:open-folder="folderClicked"
-                v-on:home-clicked="homeClicked"
-                v-on:previous-folder-clicked="previousFolderClicked"
-                ></sidebar>
+            ></sidebar>
             <div class="w3-container" style="margin-left:200px">
                 <container-folder
                     v-bind:bookmarks="bookmarks"

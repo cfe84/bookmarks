@@ -18,39 +18,19 @@ window.onload = () => {
             folderStack: [],
         },
         methods: {
-            folderClicked: function(folder) { navigateToFolder(folder) },
-            homeClicked: function() { loadRootFolder() },
-            previousFolderClicked: function() { loadPreviousFolder() }
+            folderClicked: function(folder) { openFolder(folder) },
         }
     });
 
-    function navigateToFolder(folder) {
-        if (app.currentFolder && app.currentFolder.id !== "fake-13948329843") {
-            app.folderStack.push(app.currentFolder);
-        }
-        openFolder(folder);
-    }
-
     function openFolder(folder) {
-        
-        app.currentFolder = folder;
-        apiOperations.getSubfolders(folder.id)
-            .then(folders => app.folders = folders);
         apiOperations.getBookmarks(folder.id)
             .then(bookmarks => app.bookmarks = bookmarks);
     }
 
     function loadRootFolder() {  
-        app.folderStack = [];      
         apiOperations.getRootFolder()
         .then(rootFolder => openFolder(rootFolder));
     }
-
-    function loadPreviousFolder() {
-        const previousFolder = app.folderStack.pop();
-        openFolder(previousFolder);
-    }
-
 
     loadRootFolder();
 }

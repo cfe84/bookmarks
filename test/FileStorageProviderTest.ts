@@ -1,26 +1,19 @@
 import { suite, test,  } from "mocha-typescript";
 import should from "should";
-import { FileStorageProvider } from "../src/storage/FileStorageProvider";
-import { Folder } from "../src/models/Folder";
-import fs from "fs";
-import { Bookmark } from "../src/models/Bookmark";
+import { FileStorageProvider, InMemoryFileProvider } from "../src/storage";
+import { Folder, Bookmark } from "../src/models";
 const uuid = require("uuid/v4");
 
 @suite
 class FileStorageProviderTest {
-    private testFolder: string = "./testData";
     private testFolderName: string = "Folder Name";
     private testDescription: string = "Description";
 
-    public before() {
-        if (!fs.existsSync(this.testFolder)) {
-            fs.mkdirSync(this.testFolder);
-        }
-    }
 
     @test("should save and open a sub-folder")
     async saveAndOpenFolder() {
-        const provider = new FileStorageProvider(this.testFolder);
+        const provider = new FileStorageProvider(new InMemoryFileProvider());
+
         const userId = uuid();
         const folder = new Folder(this.testFolderName);
         folder.description = this.testDescription;
@@ -36,7 +29,7 @@ class FileStorageProviderTest {
 
     @test("should save and open a bookmark")
     async saveAndOpenBookmark() {
-        const provider = new FileStorageProvider(this.testFolder);
+        const provider = new FileStorageProvider(new InMemoryFileProvider());
         const userId = uuid();
         const folderId = uuid();
         const bookmark = new Bookmark(this.testFolderName, "href");
@@ -54,7 +47,7 @@ class FileStorageProviderTest {
 
     @test("should save and list sub folders")
     async saveAndListFolders() {
-        const provider = new FileStorageProvider(this.testFolder);
+        const provider = new FileStorageProvider(new InMemoryFileProvider());
         const userId = uuid();
         const folderId = uuid();
         const folder = new Folder(this.testFolderName);
@@ -71,7 +64,7 @@ class FileStorageProviderTest {
         const bookmark2 = new Bookmark("name 2", "bookmark 2");
         folder.bookmarkIds = [bookmark1.id, bookmark2.id];
 
-        const provider = new FileStorageProvider(this.testFolder);
+        const provider = new FileStorageProvider(new InMemoryFileProvider());
         await provider.saveBookmarkAsync(userId, bookmark1);
         await provider.saveBookmarkAsync(userId, bookmark2);
         await provider.saveFolderAsync(userId, folder);
@@ -84,7 +77,7 @@ class FileStorageProviderTest {
 
     @test("should delete bookmarks and not list them")
     async deleteBookmarks() {
-        const provider = new FileStorageProvider(this.testFolder);
+        const provider = new FileStorageProvider(new InMemoryFileProvider());
         const userId = uuid();
         const folderId = uuid();
         const bookmark = new Bookmark(this.testFolderName, "href");
@@ -99,7 +92,7 @@ class FileStorageProviderTest {
 
     @test("should delete and not list folder")
     async deleteFolders() {
-        const provider = new FileStorageProvider(this.testFolder);
+        const provider = new FileStorageProvider(new InMemoryFileProvider());
         const userId = uuid();
         const folder = new Folder(this.testFolderName);
         await provider.saveFolderAsync(userId, folder);

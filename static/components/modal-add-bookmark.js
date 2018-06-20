@@ -2,22 +2,39 @@ Vue.component("modal-add-bookmark", {
     methods: {
         closeModal: function() { this.$emit('close-add-bookmark-modal-clicked'); },
         saveBookmark: function() { 
-            this.bookmark.tags = this.bookmark.tags.split(",");
-            apiOperations.putBookmark(this.folder.id, this.bookmark).then(() => {
+            if (this.bookmark && this.bookmark.split) {
+                this.bookmark.tags = this.bookmark.tags.split(",");
+            }
+            apiOperations.putBookmark(this.selectedFolder.id, this.bookmark).then(() => {
                 this.closeModal();        
             });
         },
+        showFolderSelection: function() {
+            this.folderModalVisible = true;
+        },
+        folderSelected: function(folder) {
+            this.selectedFolder = folder;
+            this.folderModalVisible = false;
+        },
+        hideFolderSelection: function() {
+            this.folderModalVisible = false;
+        }
     },
     props: [
         "folder", "bookmark"
     ],
     data: function() {
         return {
-            folderId: this.folder.id
+            selectedFolder: this.folder,
+            folderId: this.folder.id,
+            folderModalVisible: false
         };
     },
     template: '        \
 <div id="modal" class="w3-modal">\
+    <modal-select-folder v-on:folder-selected="folderSelected" \
+    v-on:folder-selection-cancelled="hideFolderSelection" v-bind:visible="folderModalVisible">\
+    </modal-select-folder>\
     <div style="top: 0; left: calc(50% - 200px); position: fixed; max-width: 400px" class="w3-modal-content w3-card-4 w3-animate-top">\
         <div style="margin:auto">\
             <div class="w3-container w3-theme-d2">\
@@ -34,9 +51,7 @@ Vue.component("modal-add-bookmark", {
                 </p>\
                 <p>\
                     <label class="w3-text-grey">Folder</label>\
-                    <select class="w3-select" v-model="folderId" >\
-                        \
-                    </select>\
+                    <span>{{selectedFolder.name}} <i class="fa fa-folder" v-on:click="showFolderSelection"></i></span>\
                 </p>\
                 <p>\
                     <label class="w3-text-grey">Description</label>\

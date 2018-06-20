@@ -1,4 +1,4 @@
-Vue.component("browser-folder", function(resolve,reject) {
+Vue.component("browser-folders", function(resolve,reject) {
     let rootFolder;
     apiOperations.getRootFolder()
     .then((folder) => {
