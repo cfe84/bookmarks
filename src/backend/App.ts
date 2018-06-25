@@ -30,7 +30,7 @@ class App {
         Container.set(container);
 
         this.app = Express();
-        this.app.use(Express.static("./src/frontend"));
+        this.app.use(Express.static("./dist"));
         this.app.use(expressBody.json());
 
         const bookmarksController = new BookmarksController(container);

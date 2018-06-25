@@ -1,6 +1,6 @@
 import { ICommand } from "./ICommand";
 import { Container } from "../Container";
-import { Folder } from "../models/Folder";
+import { Folder } from "../models";
 
 class AddSubfolderCommand implements ICommand {
     constructor(private userId: string, 

@@ -1,9 +1,8 @@
 import { Container } from "../Container";
-import { IStorageProvider } from "../storage/IStorageProvider";
-import { Folder } from "../models/Folder";
+import { IStorageProvider } from "../storage";
+import { Folder, Bookmark } from "../models";
 import { RequestParameters } from "./RequestParameters";
 import { mapRoute } from "./utils/mapRoute";
-import { Bookmark } from "../models/Bookmark";
 import { AddBookmarkToFolderCommand, AddSubfolderCommand, DeleteSubfolderCommand } from "../commands";
 const uuid = require("uuid/v4");
 

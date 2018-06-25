@@ -1,7 +1,6 @@
 import { Container } from "../Container";
-import { IStorageProvider } from "../storage/IStorageProvider";
-import { Folder } from "../models/Folder";
-import { Bookmark } from "../models/Bookmark";
+import { IStorageProvider } from "../storage";
+import { Folder, Bookmark } from "../models";
 import { RequestParameters } from "./RequestParameters";
 import { mapRoute } from "./utils/mapRoute";
 import { SaveBookmarkCommand } from "../commands";

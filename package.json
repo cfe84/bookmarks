@@ -6,8 +6,12 @@
   "main": "./src/backend/server.ts",
   "scripts": {
     "clean": "rm -r ./lib/* ; rm -r testdata",
-    "serve": "nodemon --ignore data --ignore static --exec ./node_modules/.bin/ts-node -- ./src/backend/server.ts",
-    "build:frontend": "webpack",
+    "watch:be": "nodemon --watch ./src/backend --exec ./node_modules/.bin/ts-node -- ./src/backend/server.ts",
+    "build:be": "tsc",
+    "build:fe": "webpack --mode development",
+    "watch:fe": "nodemon --watch ./src/frontend --exec ./node_modules/.bin/webpack -- --mode development",
+    "build:fe-prod": "webpack --mode production",
+    "build": "npm run build:frontend && npm run build:backend",
     "test": "mocha --compilers ts:ts-node/register test/**/*.ts"
   },
   "repository": {
@@ -33,11 +37,16 @@
   },
   "devDependencies": {
     "@types/azure": "^0.9.19",
+    "copy-webpack-plugin": "^4.5.1",
+    "file-loader": "^1.1.11",
     "mocha": "^5.2.0",
     "mocha-typescript": "^1.1.14",
     "nodemon": "^1.17.5",
     "should": "^13.2.1",
     "typescript": "^2.9.1",
+    "vue": "^2.5.16",
+    "vue-loader": "^15.2.4",
+    "vue-template-compiler": "^2.5.16",
     "webpack": "^4.12.1",
     "webpack-cli": "^3.0.8"
   }

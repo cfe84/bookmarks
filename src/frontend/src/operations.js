@@ -27,7 +27,7 @@ function CallBackendAsync(apiUrl, method = "GET", body = null) {
     })
 }
 
-apiOperations = {
+export default {
     getRootFolder: () => CallBackendAsync(`/folders`),
     getSubfolders: (parentFolderId) => CallBackendAsync(`/folders/${parentFolderId}/folders`),
     getBookmarks: (parentFolderId) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks`),

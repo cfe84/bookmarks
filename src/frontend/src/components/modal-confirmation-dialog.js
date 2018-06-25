@@ -1,3 +1,5 @@
+import Vue from "../vue";
+
 const modalConfirmationDialogComponent = Vue.component("modal-confirmation-dialog", {
     props: {
         "yes": {
@@ -42,7 +44,7 @@ const modalConfirmationDialogComponent = Vue.component("modal-confirmation-dialo
 </div>'
 });
 
-function confirmationDialog(
+export default function confirmationDialog(
     message = "Are you sure", 
     title = "Confirmation", 
     yes = "Yes", 

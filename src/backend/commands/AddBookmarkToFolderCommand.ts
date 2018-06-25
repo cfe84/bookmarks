@@ -1,6 +1,6 @@
 import { ICommand } from "./ICommand";
 import { Container } from "../Container";
-import { Bookmark } from "../models/Bookmark";
+import { Bookmark } from "../models";
 
 class AddBookmarkToFolderCommand implements ICommand {
     constructor(private userId: string, 
