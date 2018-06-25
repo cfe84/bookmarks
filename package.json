@@ -2,11 +2,12 @@
   "name": "bookmarks",
   "version": "1.0.0",
   "description": "Bookmark server",
-  "main": "./src/server.ts",
+  "private": true,
+  "main": "./src/backend/server.ts",
   "scripts": {
-    "start": "npm run build:live",
     "clean": "rm -r ./lib/* ; rm -r testdata",
-    "build:live": "nodemon --ignore data --ignore static --exec ./node_modules/.bin/ts-node -- ./src/server.ts",
+    "serve": "nodemon --ignore data --ignore static --exec ./node_modules/.bin/ts-node -- ./src/backend/server.ts",
+    "build:frontend": "webpack",
     "test": "mocha --compilers ts:ts-node/register test/**/*.ts"
   },
   "repository": {

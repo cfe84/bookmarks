@@ -1,7 +1,7 @@
 import { suite, test,  } from "mocha-typescript";
 import should from "should";
-import { FileStorageProvider, InMemoryFileProvider } from "../src/storage";
-import { Folder, Bookmark } from "../src/models";
+import { FileStorageProvider, InMemoryFileProvider } from "../src/backend/storage";
+import { Folder, Bookmark } from "../src/backend/models";
 const uuid = require("uuid/v4");
 
 @suite

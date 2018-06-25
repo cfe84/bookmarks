@@ -1,10 +1,10 @@
 import { suite, test,  } from "mocha-typescript";
-import { FsFileProvider } from "../src/storage";
+import { FsFileProvider } from "../src/backend/storage";
 import fs from "fs";
 const uuid = require("uuid/v4");
-import { BookmarkFile } from "../src/storage/BookmarkFile";
+import { BookmarkFile } from "../src/backend/storage/BookmarkFile";
 import should from "should";
-import { Bookmark, Folder } from "../src/models";
+import { Bookmark, Folder } from "../src/backend/models";
 
 @suite
 class FsFileProviderTest {

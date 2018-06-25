@@ -1,8 +1,8 @@
 import { suite, test,  } from "mocha-typescript";
-import { JsonSerializer } from "../src/storage";
+import { JsonSerializer } from "../src/backend/storage";
 import should from "should";
-import { Bookmark, Folder } from "../src/models";
-import { BookmarkFile } from "../src/storage/BookmarkFile";
+import { Bookmark, Folder } from "../src/backend/models";
+import { BookmarkFile } from "../src/backend/storage/BookmarkFile";
 const uuid = require("uuid/v4");
 
 @suite
