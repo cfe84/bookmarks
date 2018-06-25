@@ -1,7 +1,5 @@
 import { IStorageProvider } from "./storage/IStorageProvider";
-import { Service } from "typedi";
 
-@Service()
 class Container {
     static instance: Container;
     static set(container: Container): void {

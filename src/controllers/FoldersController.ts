@@ -4,7 +4,8 @@ import { Folder } from "../models/Folder";
 import { RequestParameters } from "./RequestParameters";
 import { mapRoute } from "./utils/mapRoute";
 import { Bookmark } from "../models/Bookmark";
-import { AddBookmarkToFolderCommand, AddSubfolderCommand } from "../commands";
+import { AddBookmarkToFolderCommand, AddSubfolderCommand, DeleteSubfolderCommand } from "../commands";
+const uuid = require("uuid/v4");
 
 const ROOT_DIRECTORY: string = "root";
 
@@ -74,8 +75,19 @@ class FoldersController {
         const userId = requestParameters.headers.userid;
         const folderId = requestParameters.parameters.folderId;
         const folder: Folder = requestParameters.body;
+        if (!folder.id) {
+            folder.id = uuid();
+        }
         const command = new AddSubfolderCommand(userId, folderId, folder);
         await command.executeAsync(this.container);
+    }
+
+    async deleteSubfolder(requestParameters: RequestParameters): Promise<void> {
+        const userId = requestParameters.headers.userid;
+        const folderId = requestParameters.parameters.folderId;
+        const subFolder: Folder = requestParameters.body;
+        const command = new DeleteSubfolderCommand(userId, folderId, subFolder);
+        await command.executeAsync(this.container)
     }
 }
 

@@ -4,15 +4,29 @@ import {BookmarksController} from "./controllers/BookmarksController";
 import {FoldersController} from "./controllers/FoldersController";
 import expressBody from "body-parser";
 import { Container } from "./Container";
-import { FileStorageProvider, FsFileProvider } from "./storage";
-import { IStorageProvider } from "./storage/IStorageProvider";
+import { FileStorageProvider, FsFileProvider, IStorageProvider, AzureBlobStorageFileProvider, IFileProvider } from "./storage";
 
 class App {
     app: any;
+
+    private inject(): Container {
+        let storage: IStorageProvider;
+        let fileProvider: IFileProvider;
+        if (process.env.STORAGE_CONNECTION_STRING !== undefined) {
+            fileProvider = new AzureBlobStorageFileProvider(process.env.STORAGE_CONNECTION_STRING);
+        } else {
+            let dataFolder = process.env.DATA_FOLDER;
+            if (dataFolder === undefined) {
+                dataFolder = "./data";
+                console.warn("DATA_FOLDER not set, defaulting to folder ./data");
+            }
+            fileProvider = new FsFileProvider(dataFolder);
+        }
+        return new Container(new FileStorageProvider(fileProvider));
+    }
+
     constructor() {
-        const storage = new FileStorageProvider(new FsFileProvider("data"));
-        const container = new Container(storage);
-        
+        const container = this.inject();        
         Container.set(container);
 
         this.app = Express();

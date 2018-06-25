@@ -33,5 +33,9 @@ apiOperations = {
     getBookmarks: (parentFolderId) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks`),
     getUserInfo: () => CallBackendAsync(`users/me`),
     putBookmark: (parentFolderId, bookmark) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks`, 
-        "PUT", JSON.stringify(bookmark))
+        "PUT", JSON.stringify(bookmark)),
+    putFolder: (parentFolderId, folder) => CallBackendAsync(`/folders/${parentFolderId}/folders`, 
+        "PUT", JSON.stringify(folder)),
+    deleteFolder: (parentFolderId, folder) => CallBackendAsync(`/folders/${parentFolderId}/folders`, 
+        "DELETE", JSON.stringify(folder)),
 }

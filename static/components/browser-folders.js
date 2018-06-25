@@ -34,6 +34,9 @@ Vue.component("browser-folders", function(resolve,reject) {
                 },
                 "goBack": function() {
                     this.openFolder(this.folderStack.pop());
+                },
+                "refresh": function() {
+                    this.openFolder(this.currentFolder);
                 }
             },
             template: ' \
@@ -43,8 +46,9 @@ Vue.component("browser-folders", function(resolve,reject) {
             <i v-if="folderStack.length > 0" class="fa fa-chevron-left"></i>\
             {{folderStack.length > 0 ? folderStack[folderStack.length - 1].name : "Home"}}\
         </span>&nbsp;\
-        <span class="w3-right" v-if="folderStack.length > 0" >\
-            <span style="cursor:pointer" v-on:click="goHome"><i class="fa fa-home"></i></span>&nbsp;\
+        <span class="w3-right">\
+            <span style="cursor:pointer" v-if="folderStack.length > 0" v-on:click="goHome"><i class="fa fa-home"></i></span>&nbsp;\
+            <span v-on:click="refresh" style="cursor:pointer"><i class="fa fa-recycle"></i></span>\
         </span>\
     </div>\
     <div v-for="folder in folders">\

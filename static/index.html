@@ -5,6 +5,7 @@
         <link rel="stylesheet" href="./css/w3-theme-blue.css">
         <link rel="stylesheet" href="./css/w3.css">
         <link rel="stylesheet" href="./css/fontawesome-all.min.css">
+        <script src="src/context.js"></script>
         <script src="src/operations.js"></script>
         <script src="src/vue.js"></script>
         <script src="src/index.js" type="text/javascript"></script>
@@ -16,25 +17,27 @@
         <script src="components/list-item-folder.js"></script>
         <script src="components/menu-folder.js"></script>
         <script src="components/modal-add-bookmark.js"></script>
+        <script src="components/modal-add-folder.js"></script>
+        <script src="components/modal-confirmation-dialog.js"></script>
         <script src="components/modal-select-folder.js"></script>
         <script src="components/browser-folders.js"></script>
     </head>
     <body style="min-height: 100%">
         <div id="app">
-        <body-header username="placeholder"></body-header>
-        <div id="div-container" class="w3-margin-top" style="min-height: 500px">
-            <sidebar 
-                v-on:open-folder="folderClicked"
-            ></sidebar>
-            <div class="w3-container" style="margin-left:200px">
-                <container-folder
-                    v-bind:bookmarks="bookmarks"
-                    v-bind:current-folder="currentFolder"
-                ></container-folder>
+            <div id="confirmation"></div>
+            <body-header username="placeholder"></body-header>
+            <div id="div-container" class="w3-margin-top" style="min-height: 500px">
+                <sidebar 
+                    v-on:open-folder="folderClicked"
+                ></sidebar>
+                <div class="w3-container" style="margin-left:200px">
+                    <container-folder 
+                        v-bind:context="context"
+                    ></container-folder>
+                </div>
             </div>
-        </div>
             
-        <body-footer></body-footer>
+            <body-footer></body-footer>
         </div>
     </body>
 </html>
