@@ -1,7 +1,12 @@
 <template>
     <div id="modal" class="w3-modal">
-        <modal-select-folder v-on:folder-selected="folderSelected" 
-        v-on:folder-selection-cancelled="hideFolderSelection" v-bind:visible="folderModalVisible">
+        <modal-select-folder 
+            v-on:folder-selected="folderSelected" 
+            v-on:folder-selection-cancelled="hideFolderSelection" 
+            v-bind:visible="folderModalVisible"
+            v-bind:context="context"
+            v-bind:updateContext="false"
+        >
         </modal-select-folder>
         <div style="top: 0; left: calc(50% - 200px); position: fixed; max-width: 400px" class="w3-modal-content w3-card-4 w3-animate-top">
             <div style="margin:auto">
@@ -43,6 +48,9 @@ export default {
                 this.bookmark.tags = this.bookmark.tags.split(",");
             }
             apiOperations.putFolder(this.selectedFolder.id, this.folder).then(() => {
+                if (this.selectedFolder.id === this.context.currentFolder.id) {
+                    this.context.folders.push(this.folder);
+                }
                 this.closeModal();        
             });
         },
@@ -58,11 +66,11 @@ export default {
         }
     },
     props: [
-        "parentFolder", "folder"
+        "folder", "context"
     ],
     data: function() {
         return {
-            selectedFolder: this.parentFolder,
+            selectedFolder: this.context.currentFolder || {id: "root", name: "Home"} ,
             folderId: this.folder.id,
             folderModalVisible: false
         };

@@ -55,6 +55,9 @@ export default {
                 this.bookmark.tags = this.bookmark.tags.split(",");
             }
             apiOperations.putBookmark(this.selectedFolder.id, this.bookmark).then(() => {
+                if (this.selectedFolder.id === this.context.currentFolder.id) {
+                    this.context.bookmarks.push(this.bookmark);
+                }
                 this.closeModal();        
             });
         },
@@ -70,12 +73,11 @@ export default {
         }
     },
     props: [
-        "folder", "bookmark"
+        "context", "bookmark"
     ],
     data: function() {
         return {
-            selectedFolder: this.folder,
-            folderId: this.folder.id,
+            selectedFolder: this.context.currentFolder,
             folderModalVisible: false
         };
     },

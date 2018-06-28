@@ -15,6 +15,7 @@
             <div id="div-container" class="w3-margin-top" style="min-height: 500px">
                 <sidebar 
                     v-on:open-folder="folderClicked"
+                    v-bind:context="context"
                 ></sidebar>
                 <div class="w3-container" style="margin-left:200px">
                     <container-folder 

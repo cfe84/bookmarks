@@ -19,7 +19,7 @@ function CallBackendAsync(apiUrl, method = "GET", body = null) {
                 }
             }
         };
-        xhttp.setRequestHeader("userid", "0ff4c5d9-41b3-47bb-84e7-75ef3593c5de");
+        xhttp.setRequestHeader("userid", "new-user-1");
         if (body) {
             xhttp.setRequestHeader("content-type", "application/json");
         }

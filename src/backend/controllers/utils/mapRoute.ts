@@ -7,7 +7,7 @@ const mapRoute = (func: any) => {
         res.json(result);
         res.end();
         } catch(error) {
-            console.error(`Error - ${error.message}`);
+            console.error(`Error - ${error.message} \n ${error.stack}`);
             res.statusCode = 500;
             res.json(error);
             res.end();

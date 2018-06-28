@@ -2,18 +2,18 @@
     <div class="w3-bar-block">
         <div class="w3-bar-item w3-blue" href="javascript:void(0)">
             <span v-on:click="goBack" style="cursor:pointer; max-width: 120px; overflow: hidden; display:inline-block; white-space: nowrap; text-overflow: ellipsis">
-                <i v-if="folderStack.length > 0" class="fa fa-chevron-left"></i>
-                {{folderStack.length > 0 ? folderStack[folderStack.length - 1].name : "Home"}}
+                <i v-if="myContext.folderStack.length > 0" class="fa fa-chevron-left"></i>
+                {{myContext.folderStack.length > 0 ? myContext.folderStack[myContext.folderStack.length - 1].name : "Home"}}
             </span>&nbsp;
             <span class="w3-right">
-                <span style="cursor:pointer" v-if="folderStack.length > 0" v-on:click="goHome"><i class="fa fa-home"></i></span>&nbsp;
+                <span style="cursor:pointer" v-if="myContext.folderStack.length > 0" v-on:click="goHome"><i class="fa fa-home"></i></span>&nbsp;
                 <span v-on:click="refresh" style="cursor:pointer"><i class="fa fa-recycle"></i></span>
             </span>
         </div>
-        <div v-for="folder in folders">
-            <list-item-folder v-bind:folder="folder" v-on:folder-clicked="subFolderSelected"></list-item-folder>
+        <div >
+            <list-item-folder v-for="folder in myContext.folders" v-bind:key="folder.id" v-bind:folder="folder" v-on:folder-clicked="subFolderSelected"></list-item-folder>
         </div>
-        <div v-if="folders.length === 0"><i>No sub-folders</i></div>
+        <div v-if="myContext.folders.length === 0"><i>No sub-folders</i></div>
     </div>
 </template>
 
@@ -22,37 +22,57 @@
     import apiOperations from "../operations"
     let rootFolder;
 
+    const copyContext = (context) => { 
+        return {
+            currentFolder: context.currentFolder,
+            folders: context.folders.slice(),
+            folderStack: context.folderStack.slice()
+        }}
+
     export default {
         data: function() {
             return {
-                currentFolder: {id: "", name: "Loading"},
-                folders: [],
                 modalVisible: false,
-                folderStack: []
+                myContext: this.updateContext ? this.context : this.copyContext(this.context)
             };
+        },
+        props: {
+            context: {
+                required: false,
+                default: () => {return {
+                    currentFolder: {id: "", name: "Loading"},
+                    folders: [],
+                    folderStack: []
+                }}
+            },
+            updateContext: {
+                required: false,
+                type: Boolean,
+                default: true
+            }
         },
         methods: {
             "subFolderSelected": function(folder) {
-                this.folderStack.push(this.currentFolder);
+                this.myContext.folderStack.push(this.myContext.currentFolder);
                 this.openFolder(folder);
             },
             "openFolder": function(folder) {
                 apiOperations.getSubfolders(folder.id)
                 .then((subFolders) => {
-                    this.currentFolder = folder;
-                    this.folders = subFolders;
+                    this.myContext.currentFolder = folder;
+                    this.myContext.folders = subFolders;
                     this.$emit("folder-selected", folder);
                 })
             },
             "goHome": function() {
-                this.folderStack = [];
+                this.myContext.folderStack = [];
                 this.openFolder(rootFolder);
             },
             "goBack": function() {
-                this.openFolder(this.folderStack.pop());
+                this.openFolder(this.myContext.folderStack.pop());
             },
             "refresh": function() {
-                this.openFolder(this.currentFolder);
+                this.openFolder(this.myContext.currentFolder);
             }
         },
         created: function () {
@@ -61,6 +81,11 @@
                     rootFolder = folder;
                     this.openFolder(rootFolder);
                 });
+        },
+        updated: function() {
+            if (!this.updateContext) {
+                this.myContext = copyContext(this.context);
+            }
         },
         components: {
             listItemFolder

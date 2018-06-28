@@ -45,6 +45,11 @@ class FoldersController {
         const userId = requestParameters.headers.userid;
         const folderId = requestParameters.parameters.folderId;
         const folder = await this.storageProvider.getFolderAsync(userId, folderId);
+        if (folder === null && folderId === ROOT_DIRECTORY) {
+            const root = new Folder("Home");
+            root.id = ROOT_DIRECTORY;
+            return root;
+        }
         return folder;
     }
     

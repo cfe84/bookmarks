@@ -4,6 +4,10 @@
   "description": "Bookmark server",
   "private": true,
   "main": "./src/backend/server.ts",
+  "watch": {
+    "build:be": "./src/backend/**/*",
+    "build:fe": "./src/frontend/**/*"
+  },
   "scripts": {
     "clean": "rm -r ./lib/* ; rm -r testdata",
     "watch:be": "nodemon --watch ./src/backend --exec ./node_modules/.bin/ts-node -- ./src/backend/server.ts",
@@ -12,7 +16,8 @@
     "watch:fe": "nodemon --watch ./src/frontend --exec ./node_modules/.bin/webpack -- --mode development",
     "build:fe-prod": "webpack --mode production",
     "build": "npm run build:frontend && npm run build:backend",
-    "test": "mocha --compilers ts:ts-node/register test/**/*.ts"
+    "test": "mocha --compilers ts:ts-node/register test/**/*.ts",
+    "watch": "npm-watch"
   },
   "repository": {
     "type": "git",
@@ -33,7 +38,8 @@
     "reflect-metadata": "^0.1.12",
     "routing-controllers": "^0.7.7",
     "ts-node": "^6.1.0",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@types/azure": "^0.9.19",
@@ -42,6 +48,7 @@
     "mocha": "^5.2.0",
     "mocha-typescript": "^1.1.14",
     "nodemon": "^1.17.5",
+    "npm-watch": "^0.3.0",
     "should": "^13.2.1",
     "typescript": "^2.9.1",
     "vue": "^2.5.16",

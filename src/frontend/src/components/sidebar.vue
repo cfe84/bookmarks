@@ -1,6 +1,7 @@
 <template>
     <div class="w3-sidebar w3-bar-block" style="width:200px" id="div-sidebar">
-        <browser-folders v-on:folder-selected="folderSelected"></browser-folders>
+        <browser-folders v-bind:context="context" 
+            v-on:folder-selected="folderSelected"></browser-folders>
     </div>
 </template>
 
@@ -13,6 +14,7 @@
                 this.$emit("open-folder", folder);
             }
         },
+        props:["context"],
         components: {
             browserFolders
         }
