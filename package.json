@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "node ./dist/server.js",
-    "clean": "rm -r ./lib/* ; rm -r testdata",
+    "clean": "rm -r ./dist-be ; rm -r ./dist-fe ; rm -r testdata",
     "watch:be": "nodemon --watch ./src/backend --exec ./node_modules/.bin/ts-node -- ./src/backend/server.ts",
     "build:be": "tsc",
     "build:fe": "webpack --mode development",

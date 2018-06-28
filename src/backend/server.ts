@@ -1,7 +1,8 @@
 import { App } from "./App";
 const PORT: number = ((): number => {
-    if (process.env["PORT"]) {
-        return +process.env["PORT"];
+    const portEnvVariable = process.env["PORT"];
+    if (portEnvVariable !== undefined) {
+        return +portEnvVariable;
     } else {
         console.warn("No PORT env variable defined, defaulting to 8080");
         return 8080;

@@ -3,6 +3,7 @@ import "reflect-metadata";
 import {BookmarksController} from "./controllers/BookmarksController";
 import {FoldersController} from "./controllers/FoldersController";
 import expressBody from "body-parser";
+import path from "path";
 import { Container } from "./Container";
 import { FileStorageProvider, FsFileProvider, IStorageProvider, AzureBlobStorageFileProvider, IFileProvider } from "./storage";
 
@@ -30,7 +31,7 @@ class App {
         Container.set(container);
 
         this.app = Express();
-        this.app.use(Express.static("./frontend"));
+        this.app.use(Express.static(path.join(__dirname, "frontend")));
         this.app.use(expressBody.json());
 
         const bookmarksController = new BookmarksController(container);
