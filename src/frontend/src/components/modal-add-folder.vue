@@ -27,7 +27,7 @@
                         <input type="text" class="w3-input" v-model="folder.description" />
                     </p>
                     <p>
-                        <button class="w3-btn w3-padding w3-theme-d2" v-on:click="saveBookmark"><i class="fa fa-save"></i>&nbsp;Save</button>
+                        <button class="w3-btn w3-padding w3-theme-d2" v-on:click="saveFolder"><i class="fa fa-save"></i>&nbsp;Save</button>
                         <button class="w3-btn w3-padding w3-theme-d2" v-on:click="closeModal"><i class="fa fa-times"></i>&nbsp;Close</button>
                     </p>
                 </div>
@@ -43,11 +43,11 @@ import apiOperations from "../operations";
 export default {
     methods: {
         closeModal: function() { this.$emit('close-modal-clicked'); },
-        saveBookmark: function() { 
+        saveFolder: function() { 
             if (this.bookmark && this.bookmark.split) {
                 this.bookmark.tags = this.bookmark.tags.split(",");
             }
-            apiOperations.putFolder(this.selectedFolder.id, this.folder).then(() => {
+            apiOperations.postFolder(this.selectedFolder.id, this.folder).then(() => {
                 if (this.selectedFolder.id === this.context.currentFolder.id) {
                     this.context.folders.push(this.folder);
                 }

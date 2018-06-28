@@ -20,10 +20,11 @@ class FoldersController {
         app.get(`${baseRoute}/`, mapRoute(this.getRoot.bind(this)));
         app.put(`${baseRoute}/`, mapRoute(this.putFolder.bind(this)));
         app.get(`${baseRoute}/:folderId`, mapRoute(this.getFolder.bind(this)));
+        app.post(`${baseRoute}/:folderId`, mapRoute(this.postToFolder.bind(this)));
         app.get(`${baseRoute}/:folderId/bookmarks`, mapRoute(this.getBookmarks.bind(this)));
-        app.put(`${baseRoute}/:folderId/bookmarks`, mapRoute(this.putBookmark.bind(this)));
+        app.post(`${baseRoute}/:folderId/bookmarks`, mapRoute(this.postBookmark.bind(this)));
         app.get(`${baseRoute}/:folderId/folders`, mapRoute(this.getSubfolders.bind(this)));
-        app.put(`${baseRoute}/:folderId/folders`, mapRoute(this.putSubfolder.bind(this)));
+        app.post(`${baseRoute}/:folderId/folders`, mapRoute(this.postSubfolder.bind(this)));
     }
        
     async getRoot(requestParameters: RequestParameters): Promise<Folder> {
@@ -60,7 +61,7 @@ class FoldersController {
         return bookmarks;
     }
 
-    async putBookmark(requestParameters: RequestParameters): Promise<void> {
+    async postBookmark(requestParameters: RequestParameters): Promise<void> {
         const userId = requestParameters.headers.userid;
         const folderId = requestParameters.parameters.folderId;
         const bookmark: Bookmark = Object.assign(new Bookmark(), requestParameters.body);
@@ -75,7 +76,7 @@ class FoldersController {
         return subfolders;
     }
 
-    async putSubfolder(requestParameters: RequestParameters): Promise<void> {
+    async postSubfolder(requestParameters: RequestParameters): Promise<void> {
         const userId = requestParameters.headers.userid;
         const folderId = requestParameters.parameters.folderId;
         const folder: Folder = requestParameters.body;
@@ -84,6 +85,10 @@ class FoldersController {
         }
         const command = new AddSubfolderCommand(userId, folderId, folder);
         await command.executeAsync(this.container);
+    }
+
+    async postToFolder(requestParameters: RequestParameters): Promise<void> {
+        
     }
 
     async deleteSubfolder(requestParameters: RequestParameters): Promise<void> {

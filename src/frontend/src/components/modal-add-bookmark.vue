@@ -54,7 +54,7 @@ export default {
             if (this.bookmark && this.bookmark.split) {
                 this.bookmark.tags = this.bookmark.tags.split(",");
             }
-            apiOperations.putBookmark(this.selectedFolder.id, this.bookmark).then(() => {
+            apiOperations.postBookmark(this.selectedFolder.id, this.bookmark).then(() => {
                 if (this.selectedFolder.id === this.context.currentFolder.id) {
                     this.context.bookmarks.push(this.bookmark);
                 }
