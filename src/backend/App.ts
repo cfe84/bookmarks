@@ -40,7 +40,7 @@ class App {
         foldersController.setRoutes(this.app);
     }
 
-    listen(port: number) {
+    listen(port: string) {
         this.app.listen(port, () => {console.log(`Listening on ${port}`)});
     }
 }
