@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "Bookmark server",
   "private": true,
-  "main": "./src/backend/server.ts",
+  "main": "./dist/App.js",
   "watch": {
     "build:be": "./src/backend/**/*",
     "build:fe": "./src/frontend/**/*"
   },
   "scripts": {
+    "start": "node ./dist/server.js",
     "clean": "rm -r ./lib/* ; rm -r testdata",
     "watch:be": "nodemon --watch ./src/backend --exec ./node_modules/.bin/ts-node -- ./src/backend/server.ts",
     "build:be": "tsc",
