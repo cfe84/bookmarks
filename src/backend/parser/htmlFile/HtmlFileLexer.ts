@@ -26,18 +26,20 @@ class HtmlFileLexer {
             processing: (match) => [new Token("closing-markup", match[1].toLowerCase())]
         },
         {
+            name: "comment",
+            regex: /<!([^>]+)>/m,
+            processing: (match) => []
+        },
+        {
             name: "text",
             regex: /\s*([^<]+)\s*/m,
-            processing: (match) => [new Token("text", match[1])]
+            processing: (match) => [new Token("text", match[1].trim())]
         }
     ];
     
-    private whitesRegex = /^[\n 	]+$/m
-
     private getTokens(element: string): Token[] {
         for(const tokenType of this.elementsRegexps) {
             const match = tokenType.regex.exec(element);
-            console.log(`${element}: ${tokenType.name}: ${match}`)
             if (match !== null && match.length > 1) {
                 return tokenType.processing(match);
             }
@@ -45,12 +47,16 @@ class HtmlFileLexer {
         throw new Error(`Unknown token: "${element}"`);
     }
 
+    private isBlank(text:string): boolean {
+        return text.trim().length === 0;
+    }
+
     public GetTokens(content: string):Array<Token> {
         const elementRegex: RegExp = /<[^>]+>|[^<]+/gm;
         let tokens = new Array<Token>();
         let element: string[] | null;
         while(element = elementRegex.exec(content)){
-            if (element === null || this.whitesRegex.test(element[0])) {
+            if (element === null || this.isBlank(element[0])) {
                 continue;
             }
             tokens = tokens.concat(this.getTokens(element[0]));

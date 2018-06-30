@@ -14,7 +14,7 @@
     "watch:fe": "nodemon --watch ./src/frontend -e 'vue,js,css,html' --exec ./node_modules/.bin/webpack -- --mode development",
     "build:fe-prod": "webpack --mode production",
     "build": "npm run build:frontend && npm run build:backend",
-    "test": "mocha --compilers ts:ts-node/register test/**/*.ts",
+    "test": "mocha --compilers ts:ts-node/register test/**/*.ts || exit 1",
     "watch:test": "nodemon --watch ./src/backend --watch ./test -e 'js,ts' --exec npm run test",
     "watch": "npm-watch"
   },
