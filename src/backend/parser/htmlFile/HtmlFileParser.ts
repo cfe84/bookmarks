@@ -35,14 +35,10 @@ class HtmlFileParser {
     }
 
     private log(str: string) {
-        console.log(str);
+        //console.log(str);
     }
 
     private bookmarkFile = new BookmarkFile(true);
-
-    private parseMeta(tokens: Array<Token>) {
-        // do nothing
-    }
 
     private isToken(index: number, name: string, value: string | null = null, shift: boolean = false): boolean | Token {
         const res = this.tokens.length > index 

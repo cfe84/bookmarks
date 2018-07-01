@@ -13,25 +13,27 @@ class ImportHtmlFileCommand implements ICommand {
         const parser = new HtmlFileParser(tokens);
 
         const parsedFile = parser.parse();
-        const folder = await container.storageProvider.getFolderAsync(this.userId, this.folderId);
+        const transaction = await container.storageProvider.beginTransactionAsync();
+        const folder = await transaction.getFolderAsync(this.userId, this.folderId);
 
         for(const folderId in parsedFile.folders) {
             if (folderId !== "root") {
-                await container.storageProvider.saveFolderAsync(
+                await transaction.saveFolderAsync(
                     this.userId, 
                     parsedFile.folders[folderId]);
             }
         }
 
         for(const bookmarkId in parsedFile.bookmarks) {
-            await container.storageProvider.saveBookmarkAsync(
+            await transaction.saveBookmarkAsync(
                 this.userId, 
                 parsedFile.bookmarks[bookmarkId]);
         }
 
         folder.bookmarkIds = folder.bookmarkIds.concat(parsedFile.folders.root.bookmarkIds);
         folder.folderIds = folder.folderIds.concat(parsedFile.folders.root.folderIds);
-        await container.storageProvider.saveFolderAsync(this.userId, folder);
+        await transaction.saveFolderAsync(this.userId, folder);
+        await transaction.commitAsync();
     }
 }
 

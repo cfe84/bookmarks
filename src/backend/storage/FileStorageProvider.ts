@@ -1,14 +1,49 @@
 import { IStorageProvider } from "./IStorageProvider";
+import { IStorageTransaction } from "./IStorageTransaction";
 import { IItem } from "../models/IItem";
 import { Folder, Bookmark } from "../models";
 import { IFileProvider } from "./IFileProvider";
 import { BookmarkFile } from "./BookmarkFile";
 
-class FileStorageProvider implements IStorageProvider {
+class FileStorageProvider implements IStorageProvider, IStorageTransaction {
+    cache: {[userId: string]: BookmarkFile} = {};
+
+    async commitAsync(): Promise<void> {
+        for (let userId in this.cache) {
+            await this.fileProvider.saveBookmarkFileAsync(userId, this.cache[userId]);
+        }
+        this.cache = {};
+    }
+
+    async beginTransactionAsync(): Promise<IStorageTransaction> {
+        const txn = new FileStorageProvider(this.fileProvider, true);
+        return txn;
+    }
+
+    private async getUserFile(userId: string) : Promise<BookmarkFile> {
+        if (this.transaction) {
+            if (!this.cache[userId]) {
+                this.cache[userId] = await this.fileProvider.getBookmarkFileAsync(userId);
+            }
+            return this.cache[userId];
+        } else {
+            return await this.fileProvider.getBookmarkFileAsync(userId);
+        }
+    }
+
+    private async saveUserFile(userId: string, file: BookmarkFile): Promise<void> {
+        if (this.transaction) {
+            this.cache[userId] = file;
+        } else {
+            await this.fileProvider.saveBookmarkFileAsync(userId, file);
+        }
+    }
+
     async getFolderAsync(userId: string, folderId: string): Promise<Folder> {
-        const file = await this.fileProvider.getBookmarkFileAsync(userId);
+        const file = await this.getUserFile(userId);
         return this.getFolderInFile(file, userId, folderId);
     }
+
     private getFolderInFile(file: BookmarkFile, userId: string, folderId: string) : Folder {
         const folder:Folder = file.folders[folderId];
         if (!folder) {
@@ -19,7 +54,7 @@ class FileStorageProvider implements IStorageProvider {
     }
 
     async getBookmarkAsync(userId: string, bookmarkId: string): Promise<Bookmark> {
-        const file = await this.fileProvider.getBookmarkFileAsync(userId);
+        const file = await this.getUserFile(userId);
         return this.getBookmarkInFile(file, userId, bookmarkId);
     }
 
@@ -33,7 +68,7 @@ class FileStorageProvider implements IStorageProvider {
     }
 
     async getSubfoldersAsync(userId: string, folderId: string): Promise<Folder[]> {
-        const file = await this.fileProvider.getBookmarkFileAsync(userId);
+        const file = await this.getUserFile(userId);
         const folder = file.folders[folderId];
         Object.setPrototypeOf(folder, Folder);
         const result: Array<Folder> = [];
@@ -43,7 +78,7 @@ class FileStorageProvider implements IStorageProvider {
         return result;
     }
     async getBookmarksAsync(userId: string, folderId: string): Promise<Bookmark[]> {
-        const file = await this.fileProvider.getBookmarkFileAsync(userId);
+        const file = await this.getUserFile(userId);
         const folder = file.folders[folderId];
         Object.setPrototypeOf(folder, Folder);
         const result: Array<Bookmark> = [];
@@ -53,28 +88,31 @@ class FileStorageProvider implements IStorageProvider {
         return result;
     }
     async saveFolderAsync(userId: string, folder: Folder): Promise<void> {
-        const file = await this.fileProvider.getBookmarkFileAsync(userId);
+        const file = await this.getUserFile(userId);
         file.folders[folder.id] = folder;
-        await this.fileProvider.saveBookmarkFileAsync(userId, file);
+        await this.saveUserFile(userId, file);
     }
+
     async saveBookmarkAsync(userId: string, bookmark: Bookmark): Promise<void> {
-        const file = await this.fileProvider.getBookmarkFileAsync(userId);
+        const file = await this.getUserFile(userId);
         file.bookmarks[bookmark.id] = bookmark;
-        await this.fileProvider.saveBookmarkFileAsync(userId, file);
+        await this.saveUserFile(userId, file);
     }
     
     async deleteFolderAsync(userId: string, folder: Folder): Promise<void> {
-        const file = await this.fileProvider.getBookmarkFileAsync(userId);
+        const file = await this.getUserFile(userId);
         delete file.folders[folder.id];
-        await this.fileProvider.saveBookmarkFileAsync(userId, file);
+        await this.saveUserFile(userId, file);
     }
     async deleteBookmarkAsync(userId: string, bookmark: Bookmark): Promise<void> {
-        const file = await this.fileProvider.getBookmarkFileAsync(userId);
+        const file = await this.getUserFile(userId);
         delete file.bookmarks[bookmark.id];
-        await this.fileProvider.saveBookmarkFileAsync(userId, file); 
+        await this.saveUserFile(userId, file); 
     }
 
-    constructor(private fileProvider: IFileProvider) {
+    constructor(
+        private fileProvider: IFileProvider, 
+        private transaction: boolean = false) {
 
     }
 }

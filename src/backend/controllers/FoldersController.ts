@@ -93,7 +93,6 @@ class FoldersController {
             const userId = requestParameters.headers.userid;
             const folderId = requestParameters.parameters.folderId;
             const fileContent: string = requestParameters.body;
-            console.log(fileContent.length);
             const command = new ImportHtmlFileCommand(userId, folderId, fileContent);
             await command.executeAsync(this.container);
         } else {

@@ -45,16 +45,6 @@ class FileStorageProviderTest {
         should(retrieved.description).equal(this.testDescription);
     }
 
-    @test("should save and list sub folders")
-    async saveAndListFolders() {
-        const provider = new FileStorageProvider(new InMemoryFileProvider());
-        const userId = uuid();
-        const folderId = uuid();
-        const folder = new Folder(this.testFolderName);
-        folder.folderIds = [uuid(), uuid()];
-        
-    }
-
     @test("should save and list bookmarks")
     async saveAndListBookmarks() {
         
@@ -101,5 +91,35 @@ class FileStorageProviderTest {
         await provider.deleteFolderAsync(userId, folder);
         should(provider.getFolderAsync(userId, folder.id))
             .be.rejectedWith("Folder not found");
+    }
+
+    @test("should update transactions only after commit")
+    async transaction() {
+        const provider = new InMemoryFileProvider();
+        const storage = new FileStorageProvider(provider);
+        const bookmark = new Bookmark("name1", "href1");
+        const folder = new Folder("folder1");
+        const user = "sldfks";
+        folder.folderIds.push(folder.id);
+        await storage.saveBookmarkAsync(user, bookmark);
+        await storage.saveFolderAsync(user, folder);
+
+        const transaction = await storage.beginTransactionAsync();
+        const updatedBookmark = new Bookmark("name2", "href2");
+        updatedBookmark.id = bookmark.id;
+        const updatedFolder = new Folder("folder2");
+        updatedFolder.id = folder.id;
+        await transaction.saveBookmarkAsync(user, updatedBookmark);
+        await transaction.saveFolderAsync(user, updatedFolder);
+
+        // const file = await provider.getBookmarkFileAsync(user);
+        // should(file.bookmarks[bookmark.id].name).equal("name1");
+        // should(file.folders[folder.id].name).equal("folder1");
+
+        await transaction.commitAsync();
+
+        const updateFile = await provider.getBookmarkFileAsync(user);
+        should(updateFile.bookmarks[bookmark.id].name).equal("name2");
+        should(updateFile.folders[folder.id].name).equal("folder2");
     }
 }

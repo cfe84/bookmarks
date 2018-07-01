@@ -28,7 +28,6 @@ class App {
 
     private rawBody(req: any, res: any, next: any) {
         let data = "";
-        console.log(req.headers);
         req.on("data", (chunk: string) => data += chunk);
         req.on("end", () => {
             if (req.headers["content-type"] === "application/json") {
