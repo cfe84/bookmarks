@@ -6,7 +6,7 @@ class RequestParameters {
     constructor(request: any) {
         this.headers = request.headers || {};
         this.parameters = request.params || {};
-        this.body = request.body || null;
+        this.body = request.body || request.rawBody || null;
     }
 }
 

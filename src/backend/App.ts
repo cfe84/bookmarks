@@ -26,13 +26,28 @@ class App {
         return new Container(new FileStorageProvider(fileProvider));
     }
 
+    private rawBody(req: any, res: any, next: any) {
+        let data = "";
+        console.log(req.headers);
+        req.on("data", (chunk: string) => data += chunk);
+        req.on("end", () => {
+            if (req.headers["content-type"] === "application/json") {
+                req.body = JSON.parse(data);
+            } else {
+                req.rawBody = data;
+            }
+            next();
+        });
+    }
+
     constructor() {
         const container = this.inject();        
         Container.set(container);
 
         this.app = Express();
+        this.app.use(this.rawBody);
         this.app.use(Express.static(path.join(__dirname, "frontend")));
-        this.app.use(expressBody.json());
+        //this.app.use(expressBody.json());
 
         const bookmarksController = new BookmarksController(container);
         bookmarksController.setRoutes(this.app);

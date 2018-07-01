@@ -4,6 +4,7 @@ import { Folder, Bookmark } from "../models";
 import { RequestParameters } from "./RequestParameters";
 import { mapRoute } from "./utils/mapRoute";
 import { AddBookmarkToFolderCommand, AddSubfolderCommand, DeleteSubfolderCommand } from "../commands";
+import { ImportHtmlFileCommand } from "../commands/ImportHtmlFileCommand";
 const uuid = require("uuid/v4");
 
 const ROOT_DIRECTORY: string = "root";
@@ -88,7 +89,16 @@ class FoldersController {
     }
 
     async postToFolder(requestParameters: RequestParameters): Promise<void> {
-        
+        if (requestParameters.headers["content-type"] === "text/html") {
+            const userId = requestParameters.headers.userid;
+            const folderId = requestParameters.parameters.folderId;
+            const fileContent: string = requestParameters.body;
+            console.log(fileContent.length);
+            const command = new ImportHtmlFileCommand(userId, folderId, fileContent);
+            await command.executeAsync(this.container);
+        } else {
+            throw Error("This should be a 400");
+        }
     }
 
     async deleteSubfolder(requestParameters: RequestParameters): Promise<void> {

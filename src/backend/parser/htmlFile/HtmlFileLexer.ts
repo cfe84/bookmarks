@@ -52,7 +52,9 @@ class HtmlFileLexer {
     }
 
     public GetTokens(content: string):Array<Token> {
-        const elementRegex: RegExp = /<[^>]+>|[^<]+/gm;
+        const elementRegex: RegExp = 
+            /<(?!\/)\s*[^ >]+(?:\s+[^= ]+\s*=\s*(?:"[^"]*"|'[^']*'))*\s*>|<\/[^>]+>|[^<]+|<![^>]+>/mg;
+        ///<[^>]+>|[^<]+/gm;
         let tokens = new Array<Token>();
         let element: string[] | null;
         while(element = elementRegex.exec(content)){

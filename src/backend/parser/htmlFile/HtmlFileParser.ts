@@ -19,6 +19,7 @@ class HtmlFileParser {
         DL: "dl",
         A: "a",
         P: "p",
+        HR: "hr",
     }
 
     private ATTRIBUTE_NAMES = {
@@ -206,10 +207,10 @@ class HtmlFileParser {
         }
     } 
 
-    private removeAllPs() {
+    private removeAllElements(element:string) {
         this.tokens = this.tokens.filter(
             (token) => token.name !== this.TOKEN_NAMES.OPENING_MARKUP ||
-                token.value !== this.TOKEN_VALUES.P
+                token.value !== element
         )
     }
 
@@ -226,7 +227,8 @@ class HtmlFileParser {
         if (this.tokens.length ===  0) {
             throw Error("No token found");
         }
-        this.removeAllPs();
+        this.removeAllElements(this.TOKEN_VALUES.P);
+        this.removeAllElements(this.TOKEN_VALUES.HR);
         this.skipToList();
         this.parseList(this.bookmarkFile.folders['root']);
         if (this.tokens.length > 0) {

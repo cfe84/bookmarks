@@ -53,7 +53,7 @@ class ImportHtmlFileTest {
         new Token("opening-markup", "p"),
         new Token("opening-markup", "dt"),
         new Token("opening-markup", "h3"),
-        new Token("attribute", "1515693643", "add_date"),
+        new Token("attribute", "15156>93643", "add_date"),
         new Token("attribute", "1528412417", "last_modified"),
         new Token("attribute", "true", "personal_toolbar_folder"),
         new Token("text", "Folder1"),
@@ -71,7 +71,7 @@ class ImportHtmlFileTest {
         <TITLE>Bookmarks</TITLE>\n\
         <H1>   text on \n \tmultiple lines</H1>\
         <DL><p>\n\
-        <DT><H3 ADD_DATE="1515693643" LAST_MODIFIED="1528412417" PERSONAL_TOOLBAR_FOLDER=\'true\'>Folder1</H3>\
+        <DT><H3 ADD_DATE="15156>93643" LAST_MODIFIED="1528412417" PERSONAL_TOOLBAR_FOLDER=\'true\'>Folder1</H3>\
         <DD>Yo this is a description\n\
         on multiple lines\n\
         <DL>');
@@ -93,6 +93,7 @@ class ImportHtmlFileTest {
         new Token("text", "Folder1"),
         new Token("closing-markup", "h3"),
         new Token("opening-markup", "dl"),
+        new Token("opening-markup", "hr"),
         new Token("opening-markup", "dt"),
         new Token("opening-markup", "a"),
         new Token("attribute", "link1", "href"),
