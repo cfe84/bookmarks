@@ -1,5 +1,5 @@
 import { suite, test,  } from "mocha-typescript";
-import { AzureBlobStorageFileProvider, IFileProvider } from "../src/backend/storage";
+import { AzureBlobStorageFileProvider, IFileProvider, Asset } from "../src/backend/storage";
 import fs from "fs";
 const uuid = require("uuid/v4");
 import { BookmarkFile } from "../src/backend/storage/BookmarkFile";
@@ -56,5 +56,15 @@ class BlobStorageFileProviderTest {
         await fileProvider.saveBookmarkFileAsync(id, bookmarkFile);
         const readFile = await fileProvider.getBookmarkFileAsync(id);
         should(readFile).be.deepEqual(bookmarkFile);
+    }
+
+    @test("should write and read asset file")
+    async writeAssetFile() {
+        const id = uuid();
+        const fileProvider = this.createFileProvider();
+        const assetFile = new Asset(uuid(), "dsfksorkgo");
+        await fileProvider.saveAssetAsync(id, assetFile);
+        const readFile = await fileProvider.getAssetAsync(id, assetFile.id);
+        should(readFile).be.deepEqual(assetFile);
     }
 }

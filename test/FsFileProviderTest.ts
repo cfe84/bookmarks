@@ -1,5 +1,5 @@
 import { suite, test,  } from "mocha-typescript";
-import { FsFileProvider } from "../src/backend/storage";
+import { FsFileProvider, Asset } from "../src/backend/storage";
 import fs from "fs";
 const uuid = require("uuid/v4");
 import { BookmarkFile } from "../src/backend/storage/BookmarkFile";
@@ -52,5 +52,15 @@ class FsFileProviderTest {
         await fileProvider.saveBookmarkFileAsync(id, bookmarkFile);
         const readFile = await fileProvider.getBookmarkFileAsync(id);
         should(readFile).be.deepEqual(bookmarkFile);
+    }
+
+    @test("should write and read asset file")
+    async writeAssetFile() {
+        const id = uuid();
+        const fileProvider = new FsFileProvider(this.testFolder);
+        const assetFile = new Asset(uuid(), "dsfksorkgo");
+        await fileProvider.saveAssetAsync(id, assetFile);
+        const readFile = await fileProvider.getAssetAsync(id, assetFile.id);
+        should(readFile).be.deepEqual(assetFile);
     }
 }

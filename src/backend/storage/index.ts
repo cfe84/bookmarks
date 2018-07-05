@@ -5,6 +5,8 @@ import { IStorageProvider } from "./IStorageProvider";
 import { FileStorageProvider } from "./FileStorageProvider";
 import { JsonSerializer } from "./JsonSerializer";
 import { AzureBlobStorageFileProvider } from "./AzureBlobStorageFileProvider";
+import { Icon } from "./Icon";
+import { Asset } from "./Asset";
 
 export {
     IFileProvider,
@@ -13,5 +15,7 @@ export {
     InMemoryFileProvider,
     FileStorageProvider,
     JsonSerializer, 
-    AzureBlobStorageFileProvider
+    AzureBlobStorageFileProvider,
+    Icon,
+    Asset
 }

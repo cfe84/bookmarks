@@ -2,7 +2,7 @@ import { IFileProvider } from "./IFileProvider";
 import fs from "fs";
 import path from "path";
 import { BookmarkFile } from "./BookmarkFile";
-import { JsonSerializer } from ".";
+import { JsonSerializer, Asset } from ".";
 
 class FsFileProvider implements IFileProvider {
     serializer = new JsonSerializer()
@@ -18,11 +18,15 @@ class FsFileProvider implements IFileProvider {
         this.createFolderIfNotExist(this.folder);
         return path.join(this.folder, userId);
     }
-    
-    private getBookmarkFilePath(userId: string): string {
+
+    private getFilePath(userId: string, fileName: string): string {
         const folder = this.getUserFolder(userId);
         this.createFolderIfNotExist(folder);
-        return path.join(folder, `bookmark.json`);
+        return path.join(folder, fileName);
+    }
+    
+    private getBookmarkFilePath(userId: string): string {
+        return this.getFilePath(userId, `bookmark.json`);
     }
 
     async getBookmarkFileAsync(userId: string): Promise<any> {
@@ -40,6 +44,22 @@ class FsFileProvider implements IFileProvider {
         const file = this.getBookmarkFilePath(userId);
         const contents = this.serializer.Serialize(bookmarks);
         fs.writeFileSync(file, contents);
+    }
+
+    async getAssetAsync(userId: string, assetId: string): Promise<Asset> {
+        const file = this.getFilePath(userId, assetId);
+        if (fs.existsSync(file)) {
+            const content = fs.readFileSync(file);
+            const asset = new Asset(assetId, content.toString());
+            return asset;
+        } else {
+            throw(`Asset not found: ${assetId}`);
+        } 
+    }
+    
+    async saveAssetAsync(userId: string, asset: Asset): Promise<void> {
+        const file = this.getFilePath(userId, asset.id);
+        fs.writeFileSync(file, asset.content);
     }
 }
 

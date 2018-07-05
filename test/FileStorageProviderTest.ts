@@ -1,6 +1,6 @@
 import { suite, test,  } from "mocha-typescript";
 import should from "should";
-import { FileStorageProvider, InMemoryFileProvider } from "../src/backend/storage";
+import { FileStorageProvider, InMemoryFileProvider, IStorageProvider, Icon } from "../src/backend/storage";
 import { Folder, Bookmark } from "../src/backend/models";
 const uuid = require("uuid/v4");
 
@@ -112,14 +112,26 @@ class FileStorageProviderTest {
         await transaction.saveBookmarkAsync(user, updatedBookmark);
         await transaction.saveFolderAsync(user, updatedFolder);
 
-        // const file = await provider.getBookmarkFileAsync(user);
-        // should(file.bookmarks[bookmark.id].name).equal("name1");
-        // should(file.folders[folder.id].name).equal("folder1");
+        const file = await provider.getBookmarkFileAsync(user);
+        should(file.bookmarks[bookmark.id].name).equal("name1");
+        should(file.folders[folder.id].name).equal("folder1");
 
         await transaction.commitAsync();
 
         const updateFile = await provider.getBookmarkFileAsync(user);
         should(updateFile.bookmarks[bookmark.id].name).equal("name2");
         should(updateFile.folders[folder.id].name).equal("folder2");
+    }
+
+    @test("should save icon and retrieve it")
+    async saveAndRetrieveIcon() {
+        const provider = new InMemoryFileProvider();
+        const storage: IStorageProvider = new FileStorageProvider(provider);
+
+        const icon = new Icon("sdflksflgde");
+        await storage.saveIconAsync("1234", icon);
+        const retrievedIcon = await storage.getIconAsync("1234", icon.id);
+
+        should(retrievedIcon).deepEqual(icon);
     }
 }
