@@ -74,7 +74,7 @@ class FoldersController {
         const userId = requestParameters.headers.userid;
         const folderId = requestParameters.parameters.folderId;
         const subfolders = await this.storageProvider.getSubfoldersAsync(userId, folderId);
-        return subfolders;
+        return subfolders.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     async postSubfolder(requestParameters: RequestParameters): Promise<void> {
