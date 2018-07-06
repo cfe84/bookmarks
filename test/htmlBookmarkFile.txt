@@ -26,7 +26,7 @@
             </DL><p>
         </DL><p>
     </DL><p>
-    <DT><A HREF="link5" 	ADD_DATE="1525973877" LAST_MODIFIED="1525973880" SHORTCUTURL="shortcuturl" LAST_CHARSET="UTF-8" TAGS="tag1,tag2">Item1</A>
+    <DT><A HREF="link5"   ADD_DATE="1525973877" LAST_MODIFIED="1525973880" SHORTCUTURL="shortcuturl"  ICON_URI="https://uri.ico" ICON="data:image/png;base64,dGhpcyBpcyBhbHBoYQ==" LAST_CHARSET="UTF-8" TAGS="tag1,tag2">Item1</A>
     <DD>Description 1
 Line 2
 </DL><p>

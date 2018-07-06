@@ -1,4 +1,4 @@
-import { suite, test,  } from "mocha-typescript";
+import { suite, test, skip,  } from "mocha-typescript";
 import { AzureBlobStorageFileProvider, IFileProvider, Asset } from "../src/backend/storage";
 import fs from "fs";
 const uuid = require("uuid/v4");
@@ -62,7 +62,7 @@ class BlobStorageFileProviderTest {
     async writeAssetFile() {
         const id = uuid();
         const fileProvider = this.createFileProvider();
-        const assetFile = new Asset(uuid(), "dsfksorkgo");
+        const assetFile = new Asset(uuid(), "dsfksorkgo", "application/x-something");
         await fileProvider.saveAssetAsync(id, assetFile);
         const readFile = await fileProvider.getAssetAsync(id, assetFile.id);
         should(readFile).be.deepEqual(assetFile);

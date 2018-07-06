@@ -18,9 +18,13 @@ class AzureBlobStorageFileProvider implements IFileProvider {
         this.blobService = new BlobService(connectionString);
     }
 
+    private getUserContainerName(userId: string): string {
+        return `user-${userId}`;
+    }
+
     private getUserContainerAsync(userId: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            const containerName = `user-${userId}`;
+            const containerName = this.getUserContainerName(userId);
             return this.blobService.createContainerIfNotExists(`user-${userId}`, (err, res) => {
                 if (err) {
                     reject(err);
@@ -67,6 +71,35 @@ class AzureBlobStorageFileProvider implements IFileProvider {
             });
     }
 
+    private setFileContentTypeAsync(userId:string, fileName: string, contentType: string): Promise<void> {
+        let containerName = this.getUserContainerName(userId);
+        return new Promise<void>((resolve, reject) => this.blobService.setBlobProperties(
+            containerName, 
+            fileName, 
+            {
+                contentType: contentType
+            }, 
+            callbackCreator(resolve, reject)));
+    }
+
+    private getFileContentTypeAsync(userId:string, fileName: string): Promise<string> {
+        let containerName = this.getUserContainerName(userId);
+        return new Promise<string>((resolve, reject) => this.blobService.getBlobProperties(
+            containerName, 
+            fileName, 
+            (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    if (!result.contentSettings) {
+                        reject(Error("No content settings defined"));
+                        return;
+                    }
+                    resolve(result.contentSettings.contentType);
+                }
+            }));
+    }
+
     async getBookmarkFileAsync(userId: string): Promise<BookmarkFile> {
         try {
             const contents = await this.getFileContentAsync(userId, this.bookmarksFileName);
@@ -86,10 +119,13 @@ class AzureBlobStorageFileProvider implements IFileProvider {
 
     async getAssetAsync(userId: string, assetId: string): Promise<Asset> {
         const content = await this.getFileContentAsync(userId, assetId);
-        return new Asset(assetId, content);
+        const contentType = await this.getFileContentTypeAsync(userId, assetId);
+        return new Asset(assetId, content, contentType);
     }
+
     async saveAssetAsync(userId: string, asset: Asset): Promise<void> {
         await this.saveFileContentAsync(userId, asset.id, asset.content);
+        await this.setFileContentTypeAsync(userId, asset.id, asset.contentType);
     }
 }
 

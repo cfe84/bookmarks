@@ -12,26 +12,28 @@ class ImportHtmlFileCommand implements ICommand {
         const tokens = lexer.GetTokens(this.fileContent);
         const parser = new HtmlFileParser(tokens);
 
-        const parsedFile = parser.parse();
+        const bookmarkCollection = parser.parse();
         const transaction = await container.storageProvider.beginTransactionAsync();
         const folder = await transaction.getFolderAsync(this.userId, this.folderId);
 
-        for(const folderId in parsedFile.folders) {
-            if (folderId !== "root") {
-                await transaction.saveFolderAsync(
-                    this.userId, 
-                    parsedFile.folders[folderId]);
-            }
+        for(const folder of bookmarkCollection.folders) {
+            await transaction.saveFolderAsync(
+                this.userId, 
+                folder);
         }
 
-        for(const bookmarkId in parsedFile.bookmarks) {
+        for(const bookmark of bookmarkCollection.bookmarks) {
             await transaction.saveBookmarkAsync(
                 this.userId, 
-                parsedFile.bookmarks[bookmarkId]);
+                bookmark);
         }
 
-        folder.bookmarkIds = folder.bookmarkIds.concat(parsedFile.folders.root.bookmarkIds);
-        folder.folderIds = folder.folderIds.concat(parsedFile.folders.root.folderIds);
+        for (const icon of bookmarkCollection.icons) {
+            await container.storageProvider.saveIconAsync(this.userId, icon);
+        }
+
+        folder.bookmarkIds = folder.bookmarkIds.concat(bookmarkCollection.rootFolder.bookmarkIds);
+        folder.folderIds = folder.folderIds.concat(bookmarkCollection.rootFolder.folderIds);
         await transaction.saveFolderAsync(this.userId, folder);
         await transaction.commitAsync();
     }

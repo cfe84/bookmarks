@@ -1,7 +1,7 @@
 import { suite, test,  } from "mocha-typescript";
 import should from "should";
-import { FileStorageProvider, InMemoryFileProvider, IStorageProvider, Icon } from "../src/backend/storage";
-import { Folder, Bookmark } from "../src/backend/models";
+import { FileStorageProvider, InMemoryFileProvider, IStorageProvider } from "../src/backend/storage";
+import { Folder, Bookmark, Icon } from "../src/backend/models";
 const uuid = require("uuid/v4");
 
 @suite
@@ -128,7 +128,7 @@ class FileStorageProviderTest {
         const provider = new InMemoryFileProvider();
         const storage: IStorageProvider = new FileStorageProvider(provider);
 
-        const icon = new Icon("sdflksflgde");
+        const icon = new Icon("sdflksflgde", "contentType");
         await storage.saveIconAsync("1234", icon);
         const retrievedIcon = await storage.getIconAsync("1234", icon.id);
 

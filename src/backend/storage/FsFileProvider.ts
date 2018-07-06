@@ -50,7 +50,8 @@ class FsFileProvider implements IFileProvider {
         const file = this.getFilePath(userId, assetId);
         if (fs.existsSync(file)) {
             const content = fs.readFileSync(file);
-            const asset = new Asset(assetId, content.toString());
+            const parsed =  JSON.parse(content.toString());
+            const asset = new Asset(parsed.id, parsed.content, parsed.contentType);
             return asset;
         } else {
             throw(`Asset not found: ${assetId}`);
@@ -59,7 +60,7 @@ class FsFileProvider implements IFileProvider {
     
     async saveAssetAsync(userId: string, asset: Asset): Promise<void> {
         const file = this.getFilePath(userId, asset.id);
-        fs.writeFileSync(file, asset.content);
+        fs.writeFileSync(file, JSON.stringify(asset));
     }
 }
 

@@ -13,7 +13,7 @@ class App {
     private inject(): Container {
         let storage: IStorageProvider;
         let fileProvider: IFileProvider;
-        if (process.env.STORAGE_CONNECTION_STRING !== undefined) {
+        if (process.env.STORAGE_CONNECTION_STRING) {
             fileProvider = new AzureBlobStorageFileProvider(process.env.STORAGE_CONNECTION_STRING);
         } else {
             let dataFolder = process.env.DATA_FOLDER;

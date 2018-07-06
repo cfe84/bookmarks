@@ -1,5 +1,4 @@
-import { Folder, Bookmark } from "../models";
-import { Icon } from ".";
+import { Folder, Bookmark, Icon } from "../models";
 
 interface IStorageOperations {
     getSubfoldersAsync(userId: string, folderId: string): Promise<Array<Folder>>;

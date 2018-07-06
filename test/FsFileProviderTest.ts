@@ -58,7 +58,7 @@ class FsFileProviderTest {
     async writeAssetFile() {
         const id = uuid();
         const fileProvider = new FsFileProvider(this.testFolder);
-        const assetFile = new Asset(uuid(), "dsfksorkgo");
+        const assetFile = new Asset(uuid(), "dsfksorkgo", "content-type");
         await fileProvider.saveAssetAsync(id, assetFile);
         const readFile = await fileProvider.getAssetAsync(id, assetFile.id);
         should(readFile).be.deepEqual(assetFile);

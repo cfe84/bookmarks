@@ -27,6 +27,9 @@ class InMemoryFileProvider implements IFileProvider {
 
     async getAssetAsync(userId: string, assetId: string): Promise<Asset> {
         const files = this.getUserFiles(userId);
+        if (!files[assetId]) {
+            throw Error("File not found: " + assetId);
+        }
         return JSON.parse(files[assetId]);
     }
 

@@ -1,10 +1,10 @@
 import { IStorageProvider } from "./IStorageProvider";
 import { IStorageTransaction } from "./IStorageTransaction";
 import { IItem } from "../models/IItem";
-import { Folder, Bookmark } from "../models";
+import { Folder, Bookmark, Icon } from "../models";
 import { IFileProvider } from "./IFileProvider";
 import { BookmarkFile } from "./BookmarkFile";
-import { Icon, Asset } from ".";
+import { Asset } from ".";
 
 class FileStorageProvider implements IStorageProvider, IStorageTransaction {
     cache: {[userId: string]: BookmarkFile} = {};
@@ -117,12 +117,12 @@ class FileStorageProvider implements IStorageProvider, IStorageTransaction {
 
     async getIconAsync(userId: string, iconId: string): Promise<Icon> {
         const asset = await this.fileProvider.getAssetAsync(userId, this.getIconName(iconId));
-        const icon = new Icon(asset.content, iconId);
+        const icon = new Icon(asset.content, asset.contentType, iconId);
         return icon;
     }
 
     async saveIconAsync(userId: string, icon: Icon): Promise<void> {
-        const asset = new Asset(this.getIconName(icon.id), icon.content);
+        const asset = new Asset(this.getIconName(icon.id), icon.content, icon.contentType);
         await this.fileProvider.saveAssetAsync(userId, asset);
     }
 

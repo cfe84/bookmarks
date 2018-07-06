@@ -1,6 +1,7 @@
-import { BookmarkFile } from "../../storage/BookmarkFile";
 import { Token } from "./Token";
-import { Folder, Bookmark } from "../../models";
+import { Folder, Bookmark, Icon } from "../../models";
+import { BookmarkCollection } from "../BookmarkCollection";
+const atob = require("atob");
 
 class HtmlFileParser {
     private TOKEN_NAMES = {
@@ -25,7 +26,9 @@ class HtmlFileParser {
     private ATTRIBUTE_NAMES = {
         SHORTCUTURL: "shortcuturl",
         TAGS: "tags",
-        HREF: "href"
+        HREF: "href",
+        ICON: "icon",
+        ICON_URI: "icon_uri"
     }
 
     private tokens: Array<Token>;
@@ -38,7 +41,7 @@ class HtmlFileParser {
         //console.log(str);
     }
 
-    private bookmarkFile = new BookmarkFile(true);
+    private bookmarkCollection = new BookmarkCollection();
 
     private isToken(index: number, name: string, value: string | null = null, shift: boolean = false): boolean | Token {
         const res = this.tokens.length > index 
@@ -118,7 +121,7 @@ class HtmlFileParser {
         if (!this.nextIsFolder(true)) { throw Error("Not a folder"); }
         this.log("Found a folder");
         const folder = new Folder();
-        this.bookmarkFile.folders[folder.id] = folder;
+        this.bookmarkCollection.folders.push(folder);
         while (this.nextIsAttribute()) {
             const token = this.shiftNextToken();
             this.log(`  Ignoring attribute: ${token.name} ${token.subType}`);
@@ -142,11 +145,23 @@ class HtmlFileParser {
         return folder;
     }
 
+    private addIcon(iconContent: string): string {
+        const regex = /^data:([^;]+);([^,]+),(.+)$/mg;
+        const res = regex.exec(iconContent);
+        if (!res) {
+            throw(Error(`Cannot read icon: ${iconContent}`));
+        }
+        const content = atob(res[3]);
+        const icon = new Icon(content, res[1]);
+        this.bookmarkCollection.icons.push(icon);
+        return icon.id;
+    }
+
     private parseBookmark(): Bookmark {
         if (!this.nextIsBookmark(true)) { throw Error("Not a bookmark"); }
         this.log("Found a bookmark");
         const bookmark = new Bookmark();
-        this.bookmarkFile.bookmarks[bookmark.id] = bookmark;
+        this.bookmarkCollection.bookmarks.push(bookmark);
         while(this.nextIsAttribute()) {
             const attribute: Token = this.shiftNextToken();
             switch(attribute.subType) {
@@ -161,6 +176,14 @@ class HtmlFileParser {
                 case this.ATTRIBUTE_NAMES.TAGS:
                     bookmark.tags = attribute.value.split(/,/g);
                     this.log(`  tags: ${bookmark.tags}`);
+                    break;
+                case this.ATTRIBUTE_NAMES.ICON_URI:
+                    bookmark.iconUrl = attribute.value;
+                    this.log(`  icon-url: ${bookmark.iconUrl}`);
+                    break;
+                case this.ATTRIBUTE_NAMES.ICON:
+                    bookmark.iconId = this.addIcon(attribute.value);
+                    this.log(`  icon: added an icon with id ${bookmark.iconId}`);
                     break;
                 default: 
                     this.log(`  ignored attribute ${attribute.subType}`);
@@ -219,18 +242,18 @@ class HtmlFileParser {
         }
     }
 
-    public parse(): BookmarkFile {
+    public parse(): BookmarkCollection {
         if (this.tokens.length ===  0) {
             throw Error("No token found");
         }
         this.removeAllElements(this.TOKEN_VALUES.P);
         this.removeAllElements(this.TOKEN_VALUES.HR);
         this.skipToList();
-        this.parseList(this.bookmarkFile.folders['root']);
+        this.parseList(this.bookmarkCollection.rootFolder);
         if (this.tokens.length > 0) {
             this.throwUnexpectedToken();
         }
-        return this.bookmarkFile;
+        return this.bookmarkCollection;
     }
 }
 
