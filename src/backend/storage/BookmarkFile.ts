@@ -1,7 +1,7 @@
 import { Folder, Bookmark } from "../models";
 
 const rootNodeId: string = "root";
-const rootNodeName: string = "Name";
+const rootNodeName: string = "Home";
 
 class BookmarkFile {
     public bookmarks: { [bookmarkId: string]: Bookmark } = {}

@@ -11,17 +11,23 @@ module.exports = {
   module: {
       rules: [
           {
-              test: /\.html$/,
-              use: [
-                  'file-loader'
-              ]
+            test: /\.html$/,
+            use: [
+              'file-loader'
+            ]
           },
           {
             test: /\.vue$/,
             use: [
-                'vue-loader'
+              'vue-loader'
             ]
-        }
+          },
+          {
+            test: /\.css$/,
+            loader: [
+                'vue-style-loader', 
+                'css-loader']
+          }
       ]
   }, 
   plugins: [
