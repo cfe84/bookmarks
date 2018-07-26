@@ -34,7 +34,7 @@ class FoldersController {
     }
 
     async putFolder(requestParameters: RequestParameters): Promise<void> {
-        const userId = requestParameters.headers.userid;
+        const userId = requestParameters.user.id;
         const folder: Folder = requestParameters.body;
         const folderId = requestParameters.parameters.folderId;
         if (folderId) {
@@ -44,7 +44,7 @@ class FoldersController {
     }
 
     async getFolder(requestParameters: RequestParameters): Promise<Folder> {
-        const userId = requestParameters.headers.userid;
+        const userId = requestParameters.user.id;
         const folderId = requestParameters.parameters.folderId;
         const folder = await this.storageProvider.getFolderAsync(userId, folderId);
         if (folder === null && folderId === ROOT_DIRECTORY) {
@@ -56,14 +56,14 @@ class FoldersController {
     }
     
     async getBookmarks(requestParameters: RequestParameters): Promise<Bookmark[]> {
-        const userId = requestParameters.headers.userid;
+        const userId = requestParameters.user.id;
         const folderId = requestParameters.parameters.folderId;
         const bookmarks = await this.storageProvider.getBookmarksAsync(userId, folderId);
         return bookmarks;
     }
 
     async postBookmark(requestParameters: RequestParameters): Promise<void> {
-        const userId = requestParameters.headers.userid;
+        const userId = requestParameters.user.id;
         const folderId = requestParameters.parameters.folderId;
         const bookmark: Bookmark = Object.assign(new Bookmark(), requestParameters.body);
         const command = new AddBookmarkToFolderCommand(userId, folderId, bookmark);
@@ -71,14 +71,14 @@ class FoldersController {
     }
 
     async getSubfolders(requestParameters: RequestParameters): Promise<Folder[]> {
-        const userId = requestParameters.headers.userid;
+        const userId = requestParameters.user.id;
         const folderId = requestParameters.parameters.folderId;
         const subfolders = await this.storageProvider.getSubfoldersAsync(userId, folderId);
         return subfolders.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     async postSubfolder(requestParameters: RequestParameters): Promise<void> {
-        const userId = requestParameters.headers.userid;
+        const userId = requestParameters.user.id;
         const folderId = requestParameters.parameters.folderId;
         const folder: Folder = requestParameters.body;
         if (!folder.id) {
@@ -90,7 +90,7 @@ class FoldersController {
 
     async postToFolder(requestParameters: RequestParameters): Promise<void> {
         if (requestParameters.headers["content-type"] === "text/html") {
-            const userId = requestParameters.headers.userid;
+            const userId = requestParameters.user.id;
             const folderId = requestParameters.parameters.folderId;
             const fileContent: string = requestParameters.body;
             const command = new ImportHtmlFileCommand(userId, folderId, fileContent);
@@ -101,7 +101,7 @@ class FoldersController {
     }
 
     async deleteSubfolder(requestParameters: RequestParameters): Promise<void> {
-        const userId = requestParameters.headers.userid;
+        const userId = requestParameters.user.id;
         const folderId = requestParameters.parameters.folderId;
         const subFolder: Folder = requestParameters.body;
         const command = new DeleteSubfolderCommand(userId, folderId, subFolder);

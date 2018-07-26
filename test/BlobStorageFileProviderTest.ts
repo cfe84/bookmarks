@@ -1,9 +1,9 @@
 import { suite, test, skip,  } from "mocha-typescript";
+import should from "should";
 import { AzureBlobStorageFileProvider, IFileProvider, Asset } from "../src/backend/storage";
 import fs from "fs";
 const uuid = require("uuid/v4");
 import { BookmarkFile } from "../src/backend/storage/BookmarkFile";
-import should from "should";
 import { Bookmark, Folder } from "../src/backend/models";
 
 @suite

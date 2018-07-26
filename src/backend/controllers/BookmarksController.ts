@@ -37,7 +37,7 @@ class BookmarksController {
     }
     
     async getBookmark(requestParameters: RequestParameters): Promise<Bookmark> {
-        const userId = requestParameters.headers.userid;
+        const userId = requestParameters.user.id;
         const bookmarkId = requestParameters.parameters.bookmarkId;
         const bookmark = await this.storageProvider.getBookmarkAsync(userId, bookmarkId)
         return bookmark;
@@ -52,7 +52,7 @@ class BookmarksController {
     }
 
     async putBookmark(requestParameters: RequestParameters): Promise<void> {
-        const userId = requestParameters.headers.userid;
+        const userId = requestParameters.user.id;
         const bookmark: Bookmark = requestParameters.body;
         const command = new SaveBookmarkCommand(userId, bookmark);
         return await command.executeAsync(this.container);

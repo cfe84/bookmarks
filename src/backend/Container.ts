@@ -1,4 +1,5 @@
-import { IStorageProvider } from "./storage/IStorageProvider";
+import { IStorageProvider } from "./storage";
+import { IAuthMiddleware } from "./authentication";
 
 class Container {
     static instance: Container;
@@ -9,7 +10,8 @@ class Container {
         return this.instance
     }
     constructor(
-        public storageProvider: IStorageProvider
+        public storageProvider: IStorageProvider,
+        public authMiddleware: IAuthMiddleware
     ) { }
     
 }

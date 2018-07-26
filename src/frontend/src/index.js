@@ -39,7 +39,15 @@ window.onload = () => {
         });
     }
 
+    function loadUser() {
+        apiOperations.getUserInfo()
+        .then(user => {
+            app.context.user = user;
+        })
+    }
+
     loadRootFolder();
+    loadUser();
 }
 
 

@@ -4,6 +4,7 @@ export default function createContext() {
         parentFolder: null,
         folderStack: [],
         bookmarks: [],
-        folders: []
+        folders: [],
+        user: {id: null, name: ""}
     }
 }
