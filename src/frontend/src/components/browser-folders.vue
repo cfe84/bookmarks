@@ -1,11 +1,18 @@
 <template>
-    <div class="w3-bar-block">
-        <div class="w3-bar-item w3-blue" href="javascript:void(0)">
-            <span v-on:click="goBack" style="cursor:pointer; max-width: 120px; overflow: hidden; display:inline-block; white-space: nowrap; text-overflow: ellipsis">
+    <div>
+        <div class="w3-bar w3-blue" href="javascript:void(0)">
+            <span class="w3-bar-item"
+                v-on:click="goBack" 
+                style="cursor:pointer; 
+                       max-width: 120px;
+                       overflow: hidden;
+                       display:inline-block;
+                       white-space: nowrap;
+                       text-overflow: ellipsis">
                 <i v-if="myContext.folderStack.length > 0" class="fa fa-chevron-left"></i>
                 {{myContext.folderStack.length > 0 ? myContext.folderStack[myContext.folderStack.length - 1].name : "Home"}}
             </span>&nbsp;
-            <span class="w3-right">
+            <span class="w3-right w3-bar-item">
                 <span style="cursor:pointer" v-if="myContext.folderStack.length > 0" v-on:click="goHome"><i class="fa fa-home"></i></span>&nbsp;
                 <span v-on:click="refresh" style="cursor:pointer"><i class="fa fa-recycle"></i></span>
             </span>

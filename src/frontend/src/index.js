@@ -1,10 +1,14 @@
 import Vue from "./vue";
 import createContext from "./context";
 import apiOperations from "./operations";
+/*
 import bodyHeader from "./components/body-header.vue";
 import bodyFooter from "./components/body-footer.vue";
 import sidebar from "./components/sidebar.vue";
 import containerFolder from "./components/container-folder.vue";
+*/
+
+import bodyIndex from "./components/body-index.vue";
 
 window.onload = () => {
 
@@ -13,16 +17,8 @@ window.onload = () => {
         data: {
             context: createContext()
         },
-        methods: {
-            folderClicked: function(folder) {
-                openFolder(folder);
-            }
-        },
         components: {
-            bodyHeader,
-            bodyFooter,
-            sidebar,
-            containerFolder
+            bodyIndex
         }
     });
 

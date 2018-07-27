@@ -48,7 +48,7 @@ class FileStorageProvider implements IStorageProvider, IStorageTransaction {
     private getFolderInFile(file: BookmarkFile, userId: string, folderId: string) : Folder {
         const folder:Folder = file.folders[folderId];
         if (!folder) {
-            throw Error("Folder not found");
+            throw Error(`Folder not found: ${folderId}`);
         }
         const result = Object.assign(new Folder(), folder);
         return result;

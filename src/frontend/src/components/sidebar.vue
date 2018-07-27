@@ -1,8 +1,6 @@
 <template>
-    <div class="w3-sidebar w3-bar-block" style="width:400px" id="div-sidebar">
-        <browser-folders v-bind:context="context" 
-            v-on:folder-selected="folderSelected"></browser-folders>
-    </div>
+    <browser-folders v-bind:context="context" 
+        v-on:folder-selected="folderSelected"></browser-folders>
 </template>
 
 <script>

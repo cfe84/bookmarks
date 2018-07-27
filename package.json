@@ -11,7 +11,7 @@
     "build-n-run:be": "tsc && npm run start",
     "build:be": "tsc || exit 1",
     "build:fe": "webpack --mode development || exit 1",
-    "watch:fe": "nodemon --watch ./src/frontend -e 'vue,js,css,html' --exec ./node_modules/.bin/webpack -- --mode development",
+    "watch:fe": "nodemon --watch ./src/frontend -e 'vue,js,css,html' --exec ./node_modules/.bin/webpack -- --mode development || exit 1",
     "build:fe-prod": "webpack --mode production",
     "build": "npm run build:frontend && npm run build:backend",
     "test": "mocha --compilers ts:ts-node/register test/**/*.ts || exit 1",

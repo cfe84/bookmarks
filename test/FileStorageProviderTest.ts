@@ -90,7 +90,7 @@ class FileStorageProviderTest {
         should(retrieved.name).equal(this.testFolderName);
         await provider.deleteFolderAsync(userId, folder);
         should(provider.getFolderAsync(userId, folder.id))
-            .be.rejectedWith("Folder not found");
+            .be.rejectedWith("Folder not found: " + folder.id);
     }
 
     @test("should update transactions only after commit")

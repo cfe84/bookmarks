@@ -19,7 +19,6 @@ function CallBackendAsync(apiUrl, method = "GET", body = null, contentType = "ap
                 }
             }
         };
-        xhttp.setRequestHeader("userid", "user-3");
         if (body) {
             xhttp.setRequestHeader("content-type", contentType);
         }
