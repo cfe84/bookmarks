@@ -16,7 +16,7 @@ class ImportHtmlFileTest {
     @test("should parse the file awesomely")
     async readTheFile() {
         const fileContent: string = fs.readFileSync(path.join(__dirname, "htmlBookmarkFile.txt")).toString();
-        const command = new ImportHtmlFileCommand("userid", "root", fileContent);
+        const command = new ImportHtmlFileCommand("userid", "root", fileContent, true);
         const fileProvider = new InMemoryFileProvider();
         await fileProvider.saveBookmarkFileAsync("userid", new BookmarkFile(true));
         const storageProvider = new FileStorageProvider(fileProvider);

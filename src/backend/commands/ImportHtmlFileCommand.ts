@@ -3,7 +3,7 @@ import { Container } from "../Container";
 import { HtmlFileLexer, HtmlFileParser } from "../parser/htmlFile";
 
 class ImportHtmlFileCommand implements ICommand {
-    constructor(private userId: string, private folderId:string, private fileContent: string){
+    constructor(private userId: string, private folderId:string, private fileContent: string, private importIcons: boolean = false){
         
     }
     
@@ -28,8 +28,10 @@ class ImportHtmlFileCommand implements ICommand {
                 bookmark);
         }
 
-        for (const icon of bookmarkCollection.icons) {
-            await container.storageProvider.saveIconAsync(this.userId, icon);
+        if (this.importIcons) {
+            for (const icon of bookmarkCollection.icons) {
+                await container.storageProvider.saveIconAsync(this.userId, icon);
+            }
         }
 
         folder.bookmarkIds = folder.bookmarkIds.concat(bookmarkCollection.rootFolder.bookmarkIds);
