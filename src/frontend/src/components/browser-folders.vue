@@ -4,7 +4,7 @@
             <span class="w3-bar-item"
                 v-on:click="goBack" 
                 style="cursor:pointer; 
-                       max-width: 120px;
+                       max-width: 200px;
                        overflow: hidden;
                        display:inline-block;
                        white-space: nowrap;
@@ -18,7 +18,12 @@
             </span>
         </div>
         <div >
-            <list-item-folder v-for="folder in myContext.folders" v-bind:key="folder.id" v-bind:folder="folder" v-on:folder-clicked="subFolderSelected"></list-item-folder>
+            <list-item-folder 
+                v-for="folder in myContext.folders" 
+                v-bind:key="folder.id" 
+                v-bind:folder="folder" 
+                v-on:folder-clicked="subFolderSelected"
+                ></list-item-folder>
         </div>
         <div v-if="myContext.folders.length === 0"><i>No sub-folders</i></div>
     </div>
@@ -100,3 +105,6 @@
     }
 </script>
 
+<style>
+
+</style>

@@ -5,4 +5,4 @@ class Token {
         public subType: string = ""){}
 }
 
-export {Token}
+export { Token }
