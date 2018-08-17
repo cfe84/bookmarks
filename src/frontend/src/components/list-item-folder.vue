@@ -24,7 +24,7 @@ export default {
     }
 
     .folder:hover {
-        background-color: #ccc;
+        background-color: #ddd;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2), 0px 6px 20px 0px rgba(0,0,0,0.19);
     }
 

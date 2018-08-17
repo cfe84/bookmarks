@@ -26,7 +26,7 @@
             v-on:close-modal-clicked="closeUploadBookmarkModal"
         ></modal-upload-bookmarks>
         <div class="w3-padding"></div>
-        <ul class="w3-ul w3-hoverable">
+        <ul class="w3-ul">
             <list-item-bookmark
                 v-for="bookmark in context.bookmarks"
                 v-bind:bookmark="bookmark"
