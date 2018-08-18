@@ -1,12 +1,14 @@
 <template>
-    <div id="modal" class="w3-modal">
-        <modal-select-folder v-on:folder-selected="folderSelected" 
-        v-on:folder-selection-cancelled="hideFolderSelection" v-bind:visible="folderModalVisible">
-        </modal-select-folder>
+    <div id="modal" class="w3-modal" style="display: block">
+        <modal-select-folder 
+            v-on:folder-selected="folderSelected" 
+            v-on:folder-selection-cancelled="hideFolderSelection" 
+            v-bind:visible="folderModalVisible"
+            ></modal-select-folder>
         <div style="top: 0; left: calc(50% - 200px); position: fixed; max-width: 400px" class="w3-modal-content w3-card-4 w3-animate-top">
             <div style="margin:auto">
                 <div class="w3-container w3-theme-d2">
-                    <h3>Add bookmark</h3>
+                    <h3>{{addOrUpdate}} bookmark</h3>
                 </div>
                 <div class="w3-container w3-card-4 w3-white">
                     <p>
@@ -19,7 +21,7 @@
                     </p>
                     <p>
                         <label class="w3-text-grey">Folder</label>
-                        <span>{{selectedFolder.name}} <i class="fa fa-folder" v-on:click="showFolderSelection"></i></span>
+                        <span>{{selectedFolder ? selectedFolder.name : ""}} <i class="fa fa-folder" v-on:click="showFolderSelection"></i></span>
                     </p>
                     <p>
                         <label class="w3-text-grey">Description</label>
@@ -31,7 +33,7 @@
                     </p>
                     <p>
                         <label class="w3-text-grey">Tags (Separated by comma)</label>
-                        <input type="text" class="w3-input" v-model="bookmark.tags"/>
+                        <input type="text" class="w3-input" v-model="tags"/>
                     </p>
                     <p>
                         <button class="w3-btn w3-padding w3-theme-d2" v-on:click="saveBookmark"><i class="fa fa-save"></i>&nbsp;Save</button>
@@ -49,17 +51,32 @@ import apiOperations from "../operations";
 
 export default {
     methods: {
-        closeModal: function() { this.$emit('close-add-bookmark-modal-clicked'); },
+        closeModal: function() { 
+            this.$el.outerHTML = "";
+            this.$destroy(); 
+        },
         saveBookmark: function() { 
-            if (this.bookmark && this.bookmark.split) {
-                this.bookmark.tags = this.bookmark.tags.split(",");
+            if (this.bookmark && this.tags) {
+                this.bookmark.tags = this.tags.split(",").map(tag => tag.trim());
             }
-            apiOperations.postBookmark(this.selectedFolder.id, this.bookmark).then(() => {
-                if (this.selectedFolder.id === this.context.currentFolder.id) {
-                    this.context.bookmarks.push(this.bookmark);
-                }
-                this.closeModal();        
-            });
+            if (this.bookmark.id) {
+                apiOperations.putBookmark(this.oldFolder.id, this.selectedFolder.id, this.bookmark)
+                .then(() => {
+                    if (this.selectedFolder.id !== this.context.currentFolder.id) {
+                        this.context.bookmarks.splice(
+                            this.context.bookmarks.indexOf(this.bookmark),
+                            1);
+                    }
+                    this.closeModal();
+                });
+            } else {
+                apiOperations.postBookmark(this.selectedFolder.id, this.bookmark).then(() => {
+                    if (this.selectedFolder.id === this.context.currentFolder.id) {
+                        this.context.bookmarks.push(this.bookmark);
+                    }
+                    this.closeModal();
+                });
+            }
         },
         showFolderSelection: function() {
             this.folderModalVisible = true;
@@ -75,11 +92,23 @@ export default {
     props: [
         "context", "bookmark"
     ],
+    computed: {
+        addOrUpdate: function () { return (this.bookmark && this.bookmark.id) ? 
+            "Update"
+            : "Add" }
+    },
     data: function() {
         return {
-            selectedFolder: this.context.currentFolder,
-            folderModalVisible: false
+            oldFolder: null,
+            selectedFolder: null,
+            folderModalVisible: false,
+            tags: ""
         };
+    },
+    mounted: function () {
+        this.oldFolder = this.context ? this.context.currentFolder : null;
+        this.selectedFolder = this.context ? this.context.currentFolder : null;
+        this.tags = this.bookmark ? this.bookmark.tags ? this.bookmark.tags.join(","): "" : "";
     },
     components: {
         modalSelectFolder

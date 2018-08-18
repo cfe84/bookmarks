@@ -53,7 +53,6 @@ export default function confirmationDialog(
     return new Promise((resolve, reject) => {
         const attachment = document.getElementById(attachTo);
         const element = document.createElement("div");
-        element.id = "skldfsldfksf023oirofkrk";
         attachment.appendChild(element);
         const modal = new Vue(modalConfirmationDialogComponent);
         modal.message = message;
@@ -70,6 +69,6 @@ export default function confirmationDialog(
             attachment.innerHTML = "";
             resolve(false);
         });
-        modal.$mount(`#${element.id}`);
+        modal.$mount(element);
     });
 }

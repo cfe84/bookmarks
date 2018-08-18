@@ -33,6 +33,8 @@ export default {
     getUserInfo: () => CallBackendAsync(`/users/me`),
     postBookmark: (parentFolderId, bookmark) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks`, 
         "POST", JSON.stringify(bookmark)),
+    putBookmark: (oldParentFolderId, newParentFolderId, bookmark) => CallBackendAsync(`/folders/${oldParentFolderId}/bookmarks/?newFolderId=${newParentFolderId}`, 
+        "PUT", JSON.stringify(bookmark)),
     postFolder: (parentFolderId, folder) => CallBackendAsync(`/folders/${parentFolderId}/folders`, 
         "POST", JSON.stringify(folder)),
     deleteFolder: (parentFolderId, folder) => CallBackendAsync(`/folders/${parentFolderId}/folders`, 

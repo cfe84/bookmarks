@@ -10,29 +10,41 @@
             <span v-for="tag in bookmark.tags" v-bind:key="tag"><span class="w3-tag w3-round w3-blue">{{tag}}</span>&nbsp;</span>
         </span>
         <span class="w3-right w3-button" v-on:click="deleteBookmarkClicked"><i class="fa fa-trash"></i></span>
-        <span class="w3-right w3-button"><i class="fa fa-edit"></i></span>
+        <span class="w3-right w3-button" v-on:click="updateBookmarkClicked"><i class="fa fa-edit"></i></span>
         <br/>
         <span v-if="bookmark.description" class="w3-text-grey w3-tiny" style="text-overflow: ellipsis">{{bookmark.description}}</span>
     </li>
 </template>
 
 <script>
-    const confirmationDialog = require("./modal-confirmation-dialog");
+    import Vue from "../vue";
+    import confirmationDialog from "./modal-confirmation-dialog.js";
+    import modalAddBookmark from "./modal-add-bookmark.vue";
+    import attachToElement from "./attachToElement";
 
     export default {
-        props: ["bookmark"],
+        props: ["bookmark", "context"],
         methods: {
             bookmarkClicked: function() { 
                 window.open(this.bookmark.href);
             },
             deleteBookmarkClicked: function() { 
                 confirmationDialog(
-                    `Do you want to delete`, 
+                    `Do you want to delete ${this.bookmark.name}`, 
                     "Delete bookmark",
                     "Delete", 
                     "Cancel")
                 .then((res) => alert(res));
+            },
+            updateBookmarkClicked: function() {
+                const modal = new Vue(modalAddBookmark);
+                modal.context = this.context;
+                modal.bookmark = this.bookmark;
+                attachToElement(document.getElementById("confirmation"), modal);
             }
+        },
+        components: {
+            modalAddBookmark
         }
     }
 </script>
