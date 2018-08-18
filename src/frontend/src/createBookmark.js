@@ -4,6 +4,7 @@ export default function createBookmark() {
         href: "",
         description: "",
         keyword: "",
-        tags: ""
+        tags: "",
+        iconUrl: null
     };
 }

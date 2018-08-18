@@ -26,7 +26,7 @@ function CallBackendAsync(apiUrl, method = "GET", body = null, contentType = "ap
     })
 }
 
-export default {
+const apiOperations = {
     getRootFolder: () => CallBackendAsync(`/folders`),
     getSubfolders: (parentFolderId) => CallBackendAsync(`/folders/${parentFolderId}/folders`),
     getBookmarks: (parentFolderId) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks`),
@@ -41,4 +41,6 @@ export default {
         "DELETE", JSON.stringify(folder)),
     uploadHtml: (parentFolderId, content) => CallBackendAsync(`/folders/${parentFolderId}`,
         "POST", content, "text/html")
-}
+};
+
+export default apiOperations;

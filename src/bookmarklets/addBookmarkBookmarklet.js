@@ -1,16 +1,4 @@
-<template>
-    <div id="div-title" class="w3-bar w3-theme-d2">
-        <div class="w3-bar-item w3-left w3-half w3-xlarge"><i class="fa fa-bookmark"></i> Bookmarks</div>
-        <div class="w3-bar-item w3-right w3-half">Grab the bookmarklet: <a :href="bookmarkletContent">Add bookmark</a> | <i class="fa fa-user"></i> <span>{{context.user.name}}</span></div>
-        
-    </div>
-</template>
-
-<script>
-    const urlComponents = window.location.href.split("/")
-        .filter((entry) => entry.length !== 0);
-    const url = `${urlComponents[0]}//${urlComponents[1]}`;
-    const bookmarkletContent = `javascript:(function() {
+(function() {
     function getMetaContent(tagname) { 
         const metas = document.getElementsByTagName('meta');
         for (var i=0; i<metas.length; i++) { 
@@ -52,18 +40,9 @@
 
     function launchBM(bookmark) {
         const encodedBookmark = encodeBookmark(bookmark);
-        const url = "${url}/add.html?action=add&" + encodedBookmark;
+        const url = "http://localhost:8080/add.html?action=add&" + encodedBookmark;
         window.open(url);
     }
 
     launchBM(loadBookmarkFields());
-})()`;
-    module.exports = {
-        data: function() {
-            return {
-                bookmarkletContent
-            }
-        },
-        props: ['context']
-    }
-</script>
+})()

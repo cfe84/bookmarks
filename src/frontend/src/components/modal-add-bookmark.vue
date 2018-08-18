@@ -21,7 +21,9 @@
                     </p>
                     <p>
                         <label class="w3-text-grey">Folder</label>
-                        <span>{{selectedFolder ? selectedFolder.name : ""}} <i class="fa fa-folder" v-on:click="showFolderSelection"></i></span>
+                        <span>{{selectedFolder && selectedFolder.id 
+                            ? selectedFolder.name 
+                            : "Select a folder"}} <i class="fa fa-folder" v-on:click="showFolderSelection"></i></span>
                     </p>
                     <p>
                         <label class="w3-text-grey">Description</label>
@@ -36,7 +38,7 @@
                         <input type="text" class="w3-input" v-model="tags"/>
                     </p>
                     <p>
-                        <button class="w3-btn w3-padding w3-theme-d2" v-on:click="saveBookmark"><i class="fa fa-save"></i>&nbsp;Save</button>
+                        <button class="w3-btn w3-padding w3-theme-d2" v-on:click="saveBookmark" v-bind:disabled="!saveButtonEnabled"><i class="fa fa-save"></i>&nbsp;Save</button>
                         <button class="w3-btn w3-padding w3-theme-d2" v-on:click="closeModal"><i class="fa fa-times"></i>&nbsp;Close</button>
                     </p>
                 </div>
@@ -53,6 +55,7 @@ export default {
     methods: {
         closeModal: function() { 
             this.$el.outerHTML = "";
+            this.$emit("add-bookmark-modal-closed");
             this.$destroy(); 
         },
         saveBookmark: function() { 
@@ -95,7 +98,10 @@ export default {
     computed: {
         addOrUpdate: function () { return (this.bookmark && this.bookmark.id) ? 
             "Update"
-            : "Add" }
+            : "Add" },
+        saveButtonEnabled: function() { 
+            return this.selectedFolder && this.selectedFolder.id && this.bookmark.href;
+        }
     },
     data: function() {
         return {
