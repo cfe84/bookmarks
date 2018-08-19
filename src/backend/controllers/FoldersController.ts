@@ -7,7 +7,8 @@ import {
     AddBookmarkToFolderCommand,
     AddSubfolderCommand, 
     DeleteSubfolderCommand,
-    MoveBookmarkToFolderCommand
+    MoveBookmarkToFolderCommand,
+    MoveSubfolderCommand
 } from "../commands";
 import { ImportHtmlFileCommand } from "../commands/ImportHtmlFileCommand";
 const uuid = require("uuid/v4");
@@ -27,6 +28,7 @@ class FoldersController {
         app.put(`${baseRoute}/`, mapRoute(this.putFolder.bind(this)));
         app.get(`${baseRoute}/:folderId`, mapRoute(this.getFolder.bind(this)));
         app.post(`${baseRoute}/:folderId`, mapRoute(this.postToFolder.bind(this)));
+        app.put(`${baseRoute}/:oldFolderId/folders/:folderId`, mapRoute(this.putSubFolder.bind(this)));
         app.get(`${baseRoute}/:folderId/bookmarks`, mapRoute(this.getBookmarks.bind(this)));
         app.post(`${baseRoute}/:folderId/bookmarks`, mapRoute(this.postBookmark.bind(this)));
         app.put(`${baseRoute}/:folderId/bookmarks`, mapRoute(this.putBookmark.bind(this)));
@@ -47,6 +49,19 @@ class FoldersController {
             folder.id = folderId;
         }
         await this.storageProvider.saveFolderAsync(userId, folder);
+    }
+
+    async putSubFolder(requestParameters: RequestParameters): Promise<void> {
+        const userId = requestParameters.user.id;
+        const folder: Folder = requestParameters.body;
+        const folderId = requestParameters.parameters.folderId;
+        const oldFolderId = requestParameters.parameters.oldFolderId;
+        const newFolderId = requestParameters.queryParameters.newFolderId;
+        if (folderId) {
+            folder.id = folderId;
+        }
+        const command = new MoveSubfolderCommand(userId, oldFolderId, newFolderId, folder);
+        await command.executeAsync(this.container);
     }
 
     async getFolder(requestParameters: RequestParameters): Promise<Folder> {

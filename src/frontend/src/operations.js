@@ -37,8 +37,12 @@ const apiOperations = {
         "PUT", JSON.stringify(bookmark)),
     postFolder: (parentFolderId, folder) => CallBackendAsync(`/folders/${parentFolderId}/folders`, 
         "POST", JSON.stringify(folder)),
+    putFolder: (oldParentFolderId, newParentFolderId, folder) => CallBackendAsync(`/folders/${oldParentFolderId}/folders/${folder.id}?newFolderId=${newParentFolderId}`, 
+        "PUT", JSON.stringify(folder)),
     deleteFolder: (parentFolderId, folder) => CallBackendAsync(`/folders/${parentFolderId}/folders`, 
         "DELETE", JSON.stringify(folder)),
+    deleteBookmark: (parentFolderId, bookmark) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks/${bookmark.id}`, 
+        "DELETE"),
     uploadHtml: (parentFolderId, content) => CallBackendAsync(`/folders/${parentFolderId}`,
         "POST", content, "text/html")
 };

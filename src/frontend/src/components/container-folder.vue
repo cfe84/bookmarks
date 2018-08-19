@@ -1,17 +1,12 @@
 <template>
     <div>
-        <modal-add-folder 
-            v-bind:style="{display: addFolderModalDisplay}"
-            v-bind:context="context"
-            v-bind:folder="folder"
-            v-on:close-modal-clicked="closeAddFolderModal"
-        ></modal-add-folder>
         <menu-folder
             v-bind:context="context"
             v-bind:delete-folder="context.folderStack.length > 0"
             v-on:add-bookmark-clicked="showAddBookmarkModal"
             v-on:add-folder-clicked="showAddFolderModal"
             v-on:delete-folder-clicked="deleteFolder"
+            v-on:edit-folder-clicked="editFolder"
             v-on:upload-bookmarks-clicked="showUploadBookmarkModal"
         ></menu-folder>
         <modal-upload-bookmarks
@@ -53,9 +48,13 @@ export default {
             modal.bookmark = createBookmark();
             attachToElement(document.getElementById("confirmation"), modal);
          },
-        showAddFolderModal: function() { this.addFolderVisible = true; },
+        showAddFolderModal: function() {
+            const modal = new Vue(modalAddFolder);
+            modal.context = this.context;
+            modal.folder = createFolder();
+            attachToElement(document.getElementById("confirmation"), modal);
+        },
         showUploadBookmarkModal: function() { this.uploadBookmarksVisible = true;},
-        closeAddFolderModal: function() { this.addFolderVisible = false; },
         closeUploadBookmarkModal: function() { this.uploadBookmarksVisible = false;},
 
         deleteFolder: function() {
@@ -64,24 +63,23 @@ export default {
                     if (res) {
                         this.context.folderStack.pop();
                         this.context.currentFolder = this.context.folderStack.pop();
-                        //this.$emit('delete-folder-confirmed', this.context);
                     }
                 })
+        },
+
+        editFolder: function() {
+            const modal = new Vue(modalAddFolder);
+            modal.context = this.context;
+            modal.folder = this.context.currentFolder;
+            attachToElement(document.getElementById("confirmation"), modal);
         }
     },
     data: function () {
         return {
-            folder: createFolder(),
-            addBookmarkVisible: false,
-            addFolderVisible: false,
             uploadBookmarksVisible: false
         }
     },
     computed: {
-        addFolderModalDisplay: function() {
-            this.folder = createFolder();
-            return this.addFolderVisible ? 'block' : 'none'
-        },
         uploadBookmarksModalDisplay: function() {
             return this.uploadBookmarksVisible ? 'block': "none";
         }
@@ -89,8 +87,6 @@ export default {
     components: {
         listItemBookmark,
         menuFolder,
-        modalAddBookmark,
-        modalAddFolder,
         modalUploadBookmarks
     }
 }

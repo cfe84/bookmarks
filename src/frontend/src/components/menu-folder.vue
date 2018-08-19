@@ -6,6 +6,7 @@
         <a class="w3-bar-item w3-button" v-on:click="$emit('add-bookmark-clicked')"><i class="fa fa-bookmark"></i> Add bookmark</a>
         <a class="w3-bar-item w3-button" v-on:click="$emit('add-folder-clicked')"><i class="fa fa-folder"></i> Add folder</a>
         <a class="w3-bar-item w3-button" v-on:click="$emit('refresh-clicked')"><i class="fa fa-recycle"></i> Refresh</a>
+        <a class="w3-bar-item w3-button" v-bind:style="`display: ${editFolderVisibility}`" v-on:click="$emit('edit-folder-clicked')"><i class="fa fa-edit"></i> Edit folder</a>
         <a class="w3-bar-item w3-button" v-on:click="$emit('delete-folder-clicked')"><i class="fa fa-trash"></i> Delete folder</a>
         <a class="w3-bar-item w3-button" v-on:click="$emit('upload-bookmarks-clicked')"><i class="fa fa-upload"></i> Upload bookmarks</a>
     </div>
@@ -13,6 +14,9 @@
 
 <script>
 export default {
-    props: ['context']
+    props: ['context'],
+    computed: {
+        editFolderVisibility: function() { return this.context.folderStack.length > 0 ? "block" : "none"}
+    }
 }
 </script>
