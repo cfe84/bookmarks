@@ -21,6 +21,7 @@
     import confirmationDialog from "./modal-confirmation-dialog.js";
     import modalAddBookmark from "./modal-add-bookmark.vue";
     import attachToElement from "./attachToElement";
+    import apiOperations from '../operations';
 
     export default {
         props: ["bookmark", "context"],
@@ -34,7 +35,11 @@
                     "Delete bookmark",
                     "Delete", 
                     "Cancel")
-                .then((res) => alert(res));
+                .then((res) => apiOperations.deleteBookmark(this.context.currentFolder.id, this.bookmark))
+                .then(() => {
+                    this.$destroy();
+                    this.$el.outerHTML = "";
+                });
             },
             updateBookmarkClicked: function() {
                 const modal = new Vue(modalAddBookmark);

@@ -8,7 +8,8 @@ import {
     AddSubfolderCommand, 
     DeleteSubfolderCommand,
     MoveBookmarkToFolderCommand,
-    MoveSubfolderCommand
+    MoveSubfolderCommand,
+    DeleteBookmarkCommand
 } from "../commands";
 import { ImportHtmlFileCommand } from "../commands/ImportHtmlFileCommand";
 const uuid = require("uuid/v4");
@@ -31,6 +32,7 @@ class FoldersController {
         app.put(`${baseRoute}/:oldFolderId/folders/:folderId`, mapRoute(this.putSubFolder.bind(this)));
         app.get(`${baseRoute}/:folderId/bookmarks`, mapRoute(this.getBookmarks.bind(this)));
         app.post(`${baseRoute}/:folderId/bookmarks`, mapRoute(this.postBookmark.bind(this)));
+        app.delete(`${baseRoute}/:folderId/bookmarks/:bookmarkId`, mapRoute(this.deleteBookmark.bind(this)));
         app.put(`${baseRoute}/:folderId/bookmarks`, mapRoute(this.putBookmark.bind(this)));
         app.get(`${baseRoute}/:folderId/folders`, mapRoute(this.getSubfolders.bind(this)));
         app.post(`${baseRoute}/:folderId/folders`, mapRoute(this.postSubfolder.bind(this)));
@@ -81,6 +83,14 @@ class FoldersController {
         const folderId = requestParameters.parameters.folderId;
         const bookmarks = await this.storageProvider.getBookmarksAsync(userId, folderId);
         return bookmarks;
+    }
+
+    async deleteBookmark(requestParameters: RequestParameters): Promise<void> {
+        const userId = requestParameters.user.id;
+        const folderId = requestParameters.parameters.folderId;
+        const bookmark: Bookmark = Object.assign(new Bookmark(), requestParameters.body);
+        const command = new DeleteBookmarkCommand(userId, folderId, bookmark);
+        await command.executeAsync(this.container);
     }
 
     async postBookmark(requestParameters: RequestParameters): Promise<void> {

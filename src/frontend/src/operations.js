@@ -42,7 +42,7 @@ const apiOperations = {
     deleteFolder: (parentFolderId, folder) => CallBackendAsync(`/folders/${parentFolderId}/folders`, 
         "DELETE", JSON.stringify(folder)),
     deleteBookmark: (parentFolderId, bookmark) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks/${bookmark.id}`, 
-        "DELETE"),
+        "DELETE", JSON.stringify(bookmark)),
     uploadHtml: (parentFolderId, content) => CallBackendAsync(`/folders/${parentFolderId}`,
         "POST", content, "text/html")
 };
