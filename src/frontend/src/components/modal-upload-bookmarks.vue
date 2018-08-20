@@ -1,5 +1,5 @@
 <template>
-    <div id="modal" class="w3-modal">
+    <div id="modal" class="w3-modal" style="display: block;">
         <div style="top: 0; left: calc(50% - 200px); position: fixed; 
         max-width: 400px" class="w3-modal-content w3-card-4 w3-animate-top">
             <div style="margin:auto">
@@ -55,7 +55,8 @@ export default {
                 });
         },
         "closeModal": function() {
-            this.$emit('close-modal-clicked');
+            this.$destroy();
+            this.$el.outerHTML = "";
         }
     },
     components: {

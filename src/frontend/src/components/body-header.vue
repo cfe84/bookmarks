@@ -1,69 +1,28 @@
 <template>
     <div id="div-title" class="w3-bar w3-theme-d2">
         <div class="w3-bar-item w3-left w3-half w3-xlarge"><i class="fa fa-bookmark"></i> Bookmarks</div>
-        <div class="w3-bar-item w3-right w3-half">Grab the bookmarklet: <a :href="bookmarkletContent">Add bookmark</a> | <i class="fa fa-user"></i> <span>{{context.user.name}}</span></div>
+        <div class="w3-bar-item w3-right w3-half"><span class="w3-button" v-on:click="openSettings"><i class="fa fa-cog"></i></span>  | <i class="fa fa-user"></i> <span>{{context.user.name}}</span></div>
         
     </div>
 </template>
 
 <script>
-    const urlComponents = window.location.href.split("/")
-        .filter((entry) => entry.length !== 0);
-    const url = `${urlComponents[0]}//${urlComponents[1]}`;
-    const bookmarkletContent = `javascript:(function() {
-    function getMetaContent(tagname) { 
-        const metas = document.getElementsByTagName('meta');
-        for (var i=0; i<metas.length; i++) { 
-            if (metas[i]["name"] === tagname) { 
-                return metas[i]["content"]; 
-            }
-        } 
-        return "";
-    } 
+    import modalSettings from "./modal-settings.vue";
+    import Vue from "../vue";
+    import attachToElement from "./attachToElement.js";
 
-    function getIcon() {
-        const links = document.getElementsByTagName('meta'); 
-        for (var i=0; i<links.length; i++) { 
-            if (links[i]["rel"] === "icon" 
-                || links[i]["rel"] === "shortcut icon") { 
-                    return links[i]["href"]; 
-                }
-        } 
-        return "";
-    }
-
-    function encodeBookmark(bookmark) {
-        const res = Object.keys(bookmark)
-            .map((key) => key + "=" + encodeURIComponent(bookmark[key]))
-            .join("&");
-        return res;
-    }
-
-    function loadBookmarkFields() {
-        const bookmark = {
-            name: document.title,
-            href: document.location.href,
-            description: getMetaContent("description"),
-            tags: getMetaContent("keywords"),
-            iconUrl: getIcon()
-        };
-        return bookmark;
-    }
-
-    function launchBM(bookmark) {
-        const encodedBookmark = encodeBookmark(bookmark);
-        const url = "${url}/add.html?action=add&" + encodedBookmark;
-        window.open(url);
-    }
-
-    launchBM(loadBookmarkFields());
-})()`;
-    module.exports = {
+    export default {
         data: function() {
             return {
-                bookmarkletContent
             }
         },
-        props: ['context']
+        props: ['context'],
+        methods: {
+            openSettings: function() {
+                const modal = new Vue(modalSettings);
+                modal.context = this.context;
+                attachToElement(document.getElementById("confirmation"), modal);
+            }
+        }
     }
 </script>

@@ -7,13 +7,7 @@
             v-on:add-folder-clicked="showAddFolderModal"
             v-on:delete-folder-clicked="deleteFolder"
             v-on:edit-folder-clicked="editFolder"
-            v-on:upload-bookmarks-clicked="showUploadBookmarkModal"
         ></menu-folder>
-        <modal-upload-bookmarks
-            v-bind:style="{display: uploadBookmarksModalDisplay}"
-            v-bind:context="context"
-            v-on:close-modal-clicked="closeUploadBookmarkModal"
-        ></modal-upload-bookmarks>
         <div class="w3-padding"></div>
         <ul class="w3-ul">
             <list-item-bookmark
@@ -34,7 +28,6 @@ import menuFolder from "./menu-folder.vue";
 import confirmationDialog from "./modal-confirmation-dialog.js";
 import modalAddBookmark from "./modal-add-bookmark.vue";
 import modalAddFolder from "./modal-add-folder.vue";
-import modalUploadBookmarks from "./modal-upload-bookmarks.vue";
 import createBookmark from "../createBookmark";
 import createFolder from "../createFolder";
 import attachToElement from "./attachToElement.js";
@@ -54,8 +47,6 @@ export default {
             modal.folder = createFolder();
             attachToElement(document.getElementById("confirmation"), modal);
         },
-        showUploadBookmarkModal: function() { this.uploadBookmarksVisible = true;},
-        closeUploadBookmarkModal: function() { this.uploadBookmarksVisible = false;},
 
         deleteFolder: function() {
             confirmationDialog("Are you sure you want to delete this folder?")
@@ -79,15 +70,9 @@ export default {
             uploadBookmarksVisible: false
         }
     },
-    computed: {
-        uploadBookmarksModalDisplay: function() {
-            return this.uploadBookmarksVisible ? 'block': "none";
-        }
-    },
     components: {
         listItemBookmark,
-        menuFolder,
-        modalUploadBookmarks
+        menuFolder
     }
 }
 </script>
