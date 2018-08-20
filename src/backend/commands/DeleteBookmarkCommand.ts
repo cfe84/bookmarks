@@ -2,7 +2,7 @@ import { ICommand } from "./ICommand";
 import { Container } from "../Container";
 import { Bookmark } from "../models";
 
-class DeleteBookmarkCommand implements ICommand {
+class DeleteBookmarkCommand implements ICommand<void> {
     constructor(private userId: string, 
         private parentFolderId: string, 
         private bookmark: Bookmark) { }

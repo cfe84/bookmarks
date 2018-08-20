@@ -2,7 +2,7 @@ import { ICommand } from "./ICommand"
 import { Container } from "../Container";
 import { HtmlFileLexer, HtmlFileParser } from "../parser/htmlFile";
 
-class ImportHtmlFileCommand implements ICommand {
+class ImportHtmlFileCommand implements ICommand<void> {
     constructor(private userId: string, private folderId:string, private fileContent: string, private importIcons: boolean = false){
         
     }

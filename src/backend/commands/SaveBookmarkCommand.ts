@@ -2,7 +2,7 @@ import { ICommand } from "./ICommand";
 import { Container } from "../Container";
 import { Bookmark } from "../models";
 
-class SaveBookmarkCommand implements ICommand {
+class SaveBookmarkCommand implements ICommand<void> {
     constructor(private userId: string, 
         private bookmark: Bookmark) { }
 

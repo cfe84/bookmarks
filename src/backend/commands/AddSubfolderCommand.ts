@@ -2,7 +2,7 @@ import { ICommand } from "./ICommand";
 import { Container } from "../Container";
 import { Folder } from "../models";
 
-class AddSubfolderCommand implements ICommand {
+class AddSubfolderCommand implements ICommand<void> {
     constructor(private userId: string, 
         private parentFolderId: string, 
         private subFolder: Folder) { }

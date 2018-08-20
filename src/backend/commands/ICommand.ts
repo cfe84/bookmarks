@@ -1,7 +1,7 @@
 import { Container } from "../Container";
 
-interface ICommand {
-    executeAsync(container: Container): Promise<void>;
+interface ICommand<T> {
+    executeAsync(container: Container): Promise<T>;
 }
 
 export {ICommand};
