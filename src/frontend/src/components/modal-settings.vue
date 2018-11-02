@@ -17,6 +17,14 @@
                     <p>
                         <button class="w3-btn w3-padding w3-theme-d2" v-on:click="closeModal"><i class="fa fa-times"></i>&nbsp;Close</button>
                     </p>
+                    
+                    <h4>Connect another account</h4>
+                    <p>
+                        <a class="w3-bar-item w3-button" v-on:click="uploadBookmarksClicked"><i class="fa fa-upload"></i> Upload bookmarks</a>
+                    </p>
+                    <p>
+                        <button class="w3-btn w3-padding w3-theme-d2" v-on:click="closeModal"><i class="fa fa-times"></i>&nbsp;Close</button>
+                    </p>
                 </div>
             </div>
         </div>

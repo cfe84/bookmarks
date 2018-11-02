@@ -3,7 +3,7 @@ import should from "should";
 import { AzureBlobStorageFileProvider, IFileProvider, Asset } from "../src/backend/storage";
 import fs from "fs";
 const uuid = require("uuid/v4");
-import { BookmarkFile } from "../src/backend/storage/BookmarkFile";
+import { BookmarkFile } from "../src/backend/storage/FileBasedStorage/BookmarkFile";
 import { Bookmark, Folder } from "../src/backend/models";
 
 @suite

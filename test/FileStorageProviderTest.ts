@@ -1,4 +1,4 @@
-import { suite, test,  } from "mocha-typescript";
+import { suite, test, skip,  } from "mocha-typescript";
 import should from "should";
 import { FileStorageProvider, InMemoryFileProvider, IStorageProvider } from "../src/backend/storage";
 import { Folder, Bookmark, Icon } from "../src/backend/models";
@@ -123,7 +123,7 @@ class FileStorageProviderTest {
         should(updateFile.folders[folder.id].name).equal("folder2");
     }
 
-    @test("should save icon and retrieve it")
+    /*@test("should save icon and retrieve it")
     async saveAndRetrieveIcon() {
         const provider = new InMemoryFileProvider();
         const storage: IStorageProvider = new FileStorageProvider(provider);
@@ -133,5 +133,5 @@ class FileStorageProviderTest {
         const retrievedIcon = await storage.getIconAsync("1234", icon.id);
 
         should(retrievedIcon).deepEqual(icon);
-    }
+    }*/ // Icons disabled.
 }

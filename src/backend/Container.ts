@@ -9,10 +9,13 @@ class Container {
     static get(): Container {
         return this.instance
     }
+
     constructor(
         public storageProvider: IStorageProvider,
         public authMiddleware: IAuthMiddleware
     ) { }
+
+
     
 }
 

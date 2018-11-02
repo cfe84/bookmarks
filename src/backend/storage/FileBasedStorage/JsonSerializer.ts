@@ -1,5 +1,5 @@
 import { BookmarkFile } from "./BookmarkFile";
-import { Bookmark, Folder } from "../models";
+import { Bookmark, Folder } from "../../models";
 
 class JsonSerializer {
     constructor(private mapPrototypes: boolean = true){}

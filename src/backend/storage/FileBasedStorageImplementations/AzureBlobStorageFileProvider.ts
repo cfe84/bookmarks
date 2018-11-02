@@ -1,6 +1,6 @@
-import { IFileProvider, JsonSerializer, Asset } from ".";
+import { IFileProvider, JsonSerializer, Asset } from "../";
 import { BlobService } from "azure-storage";
-import { BookmarkFile } from "./BookmarkFile";
+import { BookmarkFile } from "../FileBasedStorage/BookmarkFile";
 
 const callbackCreator = (resolve: any, reject: any) => (err: Error, res: any) => {
     if (err) {

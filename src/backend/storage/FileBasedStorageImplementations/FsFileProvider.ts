@@ -1,8 +1,8 @@
-import { IFileProvider } from "./IFileProvider";
+import { IFileProvider } from "..";
 import fs from "fs";
 import path from "path";
-import { BookmarkFile } from "./BookmarkFile";
-import { JsonSerializer, Asset } from ".";
+import { BookmarkFile } from "../FileBasedStorage/BookmarkFile";
+import { JsonSerializer, Asset } from "..";
 
 class FsFileProvider implements IFileProvider {
     serializer = new JsonSerializer()

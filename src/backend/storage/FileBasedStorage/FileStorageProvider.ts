@@ -1,10 +1,10 @@
-import { IStorageProvider } from "./IStorageProvider";
-import { IStorageTransaction } from "./IStorageTransaction";
-import { IItem } from "../models/IItem";
-import { Folder, Bookmark, Icon } from "../models";
+import { IStorageProvider } from "../IStorageProvider";
+import { IStorageTransaction } from "../IStorageTransaction";
+import { IItem } from "../../models/IItem";
+import { Folder, Bookmark, Icon } from "../../models";
 import { IFileProvider } from "./IFileProvider";
 import { BookmarkFile } from "./BookmarkFile";
-import { Asset } from ".";
+import { Asset } from "..";
 
 class FileStorageProvider implements IStorageProvider, IStorageTransaction {
     cache: {[userId: string]: BookmarkFile} = {};

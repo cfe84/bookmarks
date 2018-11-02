@@ -1,5 +1,5 @@
 import { BookmarkFile } from "./BookmarkFile";
-import { Asset } from ".";
+import { Asset } from "../";
 
 interface IFileProvider {
     getBookmarkFileAsync(userId: string): Promise<BookmarkFile>;

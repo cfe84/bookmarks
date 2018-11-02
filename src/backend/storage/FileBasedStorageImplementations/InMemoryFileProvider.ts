@@ -1,6 +1,6 @@
-import { IFileProvider } from "./IFileProvider";
-import { BookmarkFile } from "./BookmarkFile";
-import { Asset } from ".";
+import { IFileProvider } from "..";
+import { BookmarkFile } from "../FileBasedStorage/BookmarkFile";
+import { Asset } from "..";
 
 class InMemoryFileProvider implements IFileProvider {
     private files: { [userId: string]: {[fileName:string]: string}} = {};

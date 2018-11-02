@@ -1,4 +1,4 @@
-import { Folder, Bookmark } from "../models";
+import { Folder, Bookmark } from "../../models";
 
 const rootNodeId: string = "root";
 const rootNodeName: string = "Home";
