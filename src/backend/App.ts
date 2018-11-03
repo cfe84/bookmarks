@@ -56,7 +56,7 @@ class App {
         Container.set(container);
 
         this.app = Express();
-        this.app.use(container.authMiddleware.authenticate);
+        this.app.use((req: any, res: any, next: any) => container.authMiddleware.authenticate(req, res, next));
         this.app.use(this.rawBody);
         this.app.use(Express.static(path.join(__dirname, "frontend")));
 
