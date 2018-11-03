@@ -26,14 +26,15 @@ class App {
             }
             fileProvider = new FsFileProvider(dataFolder);
         }
+        const storageProvider = new FileStorageProvider(fileProvider);
         if (process.env.WEBSITE_AUTH_DEFAULT_PROVIDER === 'AzureActiveDirectory') {
-            authMiddleware = new AzureADAuthMiddleware();
+            authMiddleware = new AzureADAuthMiddleware(storageProvider);
         } else {
             console.warn("Not auth provider configured, using a fake one");
             authMiddleware = new FakeAuthMiddleware();
         }
         return new Container(
-            new FileStorageProvider(fileProvider),
+            storageProvider,
             authMiddleware);
     }
 

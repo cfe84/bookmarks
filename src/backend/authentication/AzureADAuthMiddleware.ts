@@ -1,8 +1,12 @@
 import { IAuthMiddleware } from "./IAuthMiddleware";
 import { AuthenticatedUser } from "../models";
+import { IStorageProvider } from "../storage";
 
 class AzureADAuthMiddleware implements IAuthMiddleware{
-    authenticate(req: any, res: any, next: any): void {
+
+    constructor(private storageProvider: IStorageProvider) {}
+
+    public authenticate(req: any, res: any, next: any): void {
         if (!req.headers["x-ms-client-principal-name"] 
             || !req.headers["x-ms-client-principal-id"]) {
                 res.statusCode = 401;
@@ -10,10 +14,19 @@ class AzureADAuthMiddleware implements IAuthMiddleware{
                 res.end();
             }
         else {
-            req.user = new AuthenticatedUser(
-                req.headers["x-ms-client-principal-id"],
-                req.headers["x-ms-client-principal-name"]);
-            next();
+            const userId = this.storageProvider.getUserIdAsync(req.headers["x-ms-client-principal-id"])
+                .then((userId) => {
+                    req.user = new AuthenticatedUser(
+                        userId,
+                        req.headers["x-ms-client-principal-name"]);
+                    next();
+                })
+                .catch((error) => {
+                    res.statusCode = 403;
+                    res.json(Error("User not found"));
+                    res.end();  
+                    next();
+                })
         }
     }
 }
