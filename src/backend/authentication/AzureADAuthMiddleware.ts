@@ -26,7 +26,7 @@ class AzureADAuthMiddleware implements IAuthMiddleware{
                     console.error(`User not found: ${req.headers["x-ms-client-principal-id"]}`);
                     res.statusCode = 403;
                     res.json(Error("User not found"));
-                    res.end();  
+                    res.end(); 
                     next();
                 })
         }

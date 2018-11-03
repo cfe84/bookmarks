@@ -25,19 +25,21 @@ window.onload = () => {
             .then(bookmarks => app.context.bookmarks = bookmarks);
     }
 
-    function loadRootFolder() {  
-        apiOperations.getRootFolder()
+    function loadRootFolderAsync() {  
+        return apiOperations.getRootFolder()
         .then(rootFolder => {
             app.context.currentFolder = rootFolder;
             openFolder(rootFolder);
         });
     }
 
-    function loadUser() {
-        apiOperations.getUserInfo()
-        .then(user => {
-            app.context.user = user;
-        })
+    function getUserAsync() {
+        return apiOperations.getUserInfo();
+    }
+
+    function loadUserAsync(user) {
+        app.context.user = user;
+        return Promise.resolve(user);
     }
 
     function loadBookmarkFromParams() {
@@ -51,7 +53,31 @@ window.onload = () => {
         }
     }
 
-    loadRootFolder();
-    loadUser();
-    loadBookmarkFromParams();
+    function loadIndexAsync() {
+        const index = new Vue(bodyIndex);
+        index.context = app.context;
+        index.$mount(document.getElementById("container"));
+        return Promise.resolve();
+    }
+
+    function loadSigninRegisterAsync() {
+
+    }
+
+    function boot() {
+        getUserAsync()
+        .then((user) => {
+            const userIsAuthenticated = !!user;
+            if (userIsAuthenticated) {
+                return loadUserAsync(user)
+                .then(( ) => loadIndexAsync())
+                .then(( ) => loadRootFolderAsync())
+                .then(( ) => loadBookmarkFromParams())
+            } else {
+                return loadSigninRegisterAsync();
+            }
+        });
+    }
+    
+    boot();
 }

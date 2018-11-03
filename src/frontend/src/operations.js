@@ -1,6 +1,13 @@
-function CallBackendAsync(apiUrl, method = "GET", body = null, contentType = "application/json") {
+function CallBackendAsync(apiUrl,
+    method = "GET", 
+    body = null, 
+    contentType = "application/json", 
+    headers = []) {
     return new Promise((resolve, reject) => {
         var xhttp = new XMLHttpRequest();
+        for(let header in headers) {
+            xhttp.setRequestHeader(header.header, header.value);
+        }
         xhttp.open(method, "/api" + apiUrl, true);
         xhttp.onreadystatechange = () => {
             if(xhttp.readyState === XMLHttpRequest.DONE) {
@@ -30,7 +37,10 @@ const apiOperations = {
     getRootFolder: () => CallBackendAsync(`/folders`),
     getSubfolders: (parentFolderId) => CallBackendAsync(`/folders/${parentFolderId}/folders`),
     getBookmarks: (parentFolderId) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks`),
-    getUserInfo: () => CallBackendAsync(`/users/me`),
+    getUserInfo: (anonymous = false) => CallBackendAsync(`/users/me`, 
+        headers = anonymous 
+            ? [{header: "anonymous", value: "true"}] 
+            : []),
     postBookmark: (parentFolderId, bookmark) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks`, 
         "POST", JSON.stringify(bookmark)),
     putBookmark: (oldParentFolderId, newParentFolderId, bookmark) => CallBackendAsync(`/folders/${oldParentFolderId}/bookmarks/?newFolderId=${newParentFolderId}`, 
