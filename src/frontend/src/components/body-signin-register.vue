@@ -7,17 +7,9 @@
             <div class="option">
                 <h1>Login</h1>
 
-                <a class="login-option w3-button" href=".auth/login/microsoft">
+                <a class="login-option w3-button" href=".auth/login/microsoftaccount">
                     <i class="fab fa-microsoft"></i>
                     Microsoft
-                </a>
-                <a class="login-option w3-button" href=".auth/login/linkedin">
-                    <i class="fab fa-linkedin"></i>
-                    Linkedin
-                </a>
-                <a class="login-option w3-button" href=".auth/login/facebook">
-                    <i class="fab fa-facebook"></i>
-                    Facebook
                 </a>
                 <a class="login-option w3-button" href=".auth/login/aad">
                     <i class="fab fa-microsoft"></i>
@@ -28,6 +20,15 @@
             <div class="option">
                 <h1>Register</h1>
             </div>
+
+                <a class="login-option w3-button" href=".auth/login/microsoft">
+                    <i class="fab fa-microsoft"></i>
+                    Microsoft
+                </a>
+                <a class="login-option w3-button" href=".auth/login/aad">
+                    <i class="fab fa-microsoft"></i>
+                    Work
+                </a>
         </div>
     </div>
 </template>
