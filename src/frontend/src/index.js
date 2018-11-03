@@ -4,6 +4,7 @@ import apiOperations from "./operations";
 import getBookmarkFromParameters from "./addBookmark";
 
 import bodyIndex from "./components/body-index.vue";
+import bodySigninRegister from "./components/body-signin-register.vue";
 import modalAddBookmark from "./components/modal-add-bookmark.vue";
 import attachToElement from "./components/attachToElement";
 
@@ -16,7 +17,8 @@ window.onload = () => {
             context: context
         },
         components: {
-            bodyIndex
+            bodyIndex,
+            bodySigninRegister
         }
     });
 
@@ -34,7 +36,7 @@ window.onload = () => {
     }
 
     function getUserAsync() {
-        return apiOperations.getUserInfo();
+        return apiOperations.getUserInfo(!!localStorage.getItem("anonymous"));
     }
 
     function loadUserAsync(user) {
@@ -61,7 +63,10 @@ window.onload = () => {
     }
 
     function loadSigninRegisterAsync() {
-
+        const signinAndRegister = new Vue(bodySigninRegister);
+        signinAndRegister.context = app.context;
+        signinAndRegister.$mount(document.getElementById("container"));
+        return Promise.resolve();
     }
 
     function boot() {

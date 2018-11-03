@@ -5,9 +5,6 @@ function CallBackendAsync(apiUrl,
     headers = []) {
     return new Promise((resolve, reject) => {
         var xhttp = new XMLHttpRequest();
-        for(let header in headers) {
-            xhttp.setRequestHeader(header.header, header.value);
-        }
         xhttp.open(method, "/api" + apiUrl, true);
         xhttp.onreadystatechange = () => {
             if(xhttp.readyState === XMLHttpRequest.DONE) {
@@ -29,6 +26,9 @@ function CallBackendAsync(apiUrl,
         if (body) {
             xhttp.setRequestHeader("content-type", contentType);
         }
+        for(let header of headers) {
+            xhttp.setRequestHeader(header.header, header.value);
+        }
         xhttp.send(body);
     })
 }
@@ -37,8 +37,8 @@ const apiOperations = {
     getRootFolder: () => CallBackendAsync(`/folders`),
     getSubfolders: (parentFolderId) => CallBackendAsync(`/folders/${parentFolderId}/folders`),
     getBookmarks: (parentFolderId) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks`),
-    getUserInfo: (anonymous = false) => CallBackendAsync(`/users/me`, 
-        headers = anonymous 
+    getUserInfo: (anonymous = false) => CallBackendAsync(`/users/me`, "GET", null, null,
+        anonymous 
             ? [{header: "anonymous", value: "true"}] 
             : []),
     postBookmark: (parentFolderId, bookmark) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks`, 
