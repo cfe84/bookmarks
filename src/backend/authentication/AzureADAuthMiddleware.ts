@@ -14,7 +14,7 @@ class AzureADAuthMiddleware implements IAuthMiddleware{
                 res.end();
             }
         else {
-            const userId = this.storageProvider.getUserIdAsync(req.headers["x-ms-client-principal-id"])
+            this.storageProvider.getUserIdAsync(req.headers["x-ms-client-principal-id"])
                 .then((userId) => {
                     req.user = new AuthenticatedUser(
                         userId,
