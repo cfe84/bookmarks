@@ -48,10 +48,12 @@ class FsFileProvider implements IFileProvider {
 
     async getAssetAsync(userId: string, assetId: string): Promise<Asset> {
         const file = this.getFilePath(userId, assetId);
+
         if (fs.existsSync(file)) {
             const content = fs.readFileSync(file);
             const parsed =  JSON.parse(content.toString());
-            const asset = new Asset(parsed.id, parsed.content, parsed.contentType);
+            const asset = new Asset(parsed.id, null, parsed.contentType);
+            asset.loadFromBase64(parsed["_contentBase64"]);
             return asset;
         } else {
             throw(`Asset not found: ${assetId}`);
@@ -60,7 +62,8 @@ class FsFileProvider implements IFileProvider {
     
     async saveAssetAsync(userId: string, asset: Asset): Promise<void> {
         const file = this.getFilePath(userId, asset.id);
-        fs.writeFileSync(file, JSON.stringify(asset));
+        const serializedAsset =  JSON.stringify(asset);
+        fs.writeFileSync(file, serializedAsset);
     }
 }
 

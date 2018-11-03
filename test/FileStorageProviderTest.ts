@@ -123,7 +123,25 @@ class FileStorageProviderTest {
         should(updateFile.folders[folder.id].name).equal("folder2");
     }
 
-    /*@test("should save icon and retrieve it")
+    @test("should retrieve saved userid")
+    async saveUserId() {
+        // prepare
+        const userId = `${uuid()}`;
+        const systemUserId = `${uuid()}`;
+
+        const provider = new InMemoryFileProvider();
+        const storage = new FileStorageProvider(provider);
+        
+        // execute
+        await storage.setUserIdAsync(systemUserId, userId);
+        const newStorage = new FileStorageProvider(provider);
+        const retrievedId = await newStorage.getUserIdAsync(systemUserId);
+
+        // test
+        should(retrievedId).equal(userId);
+    }
+
+    @test("should save icon and retrieve it")
     async saveAndRetrieveIcon() {
         const provider = new InMemoryFileProvider();
         const storage: IStorageProvider = new FileStorageProvider(provider);
@@ -133,5 +151,5 @@ class FileStorageProviderTest {
         const retrievedIcon = await storage.getIconAsync("1234", icon.id);
 
         should(retrievedIcon).deepEqual(icon);
-    }*/ // Icons disabled.
+    }
 }

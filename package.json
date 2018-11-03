@@ -6,7 +6,7 @@
   "main": "./dist/App.js",
   "scripts": {
     "start": "node ./dist/server.js || exit 1",
-    "clean": "rm -r ./dist ; rm -r testdata",
+    "clean": "rm -r ./dist ; rm -r testData",
     "watch:be": "nodemon --watch ./src/backend/ -e 'js,ts' --exec npm run build-n-run:be",
     "build-n-run:be": "tsc && npm run start || exit 1",
     "build:be": "tsc || exit 1",

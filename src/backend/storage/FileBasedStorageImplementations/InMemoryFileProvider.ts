@@ -30,7 +30,10 @@ class InMemoryFileProvider implements IFileProvider {
         if (!files[assetId]) {
             throw Error("File not found: " + assetId);
         }
-        return JSON.parse(files[assetId]);
+        const asset = JSON.parse(files[assetId]);
+        const result = new Asset(asset.id, null, asset.contentType);
+        result.loadFromBase64(asset["_contentBase64"]);
+        return result;
     }
 
     async saveAssetAsync(userId: string, asset: Asset): Promise<void> {

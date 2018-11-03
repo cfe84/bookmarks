@@ -54,7 +54,6 @@ class FsFileProviderTest {
         should(readFile).be.deepEqual(bookmarkFile);
     }
 
-    /*
     @test("should write and read asset file")
     async writeAssetFile() {
         const id = uuid();
@@ -63,5 +62,5 @@ class FsFileProviderTest {
         await fileProvider.saveAssetAsync(id, assetFile);
         const readFile = await fileProvider.getAssetAsync(id, assetFile.id);
         should(readFile).be.deepEqual(assetFile);
-    }*/
+    }
 }

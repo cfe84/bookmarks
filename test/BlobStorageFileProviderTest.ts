@@ -1,4 +1,4 @@
-import { suite, test, skip,  } from "mocha-typescript";
+import { suite, test, skip, timeout,  } from "mocha-typescript";
 import should from "should";
 import { AzureBlobStorageFileProvider, IFileProvider, Asset } from "../src/backend/storage";
 import fs from "fs";

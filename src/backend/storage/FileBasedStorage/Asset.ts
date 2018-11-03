@@ -5,22 +5,26 @@ class Asset {
     private _contentBase64: string = "";
     constructor(
         public id: string = "", 
-        content: any = "", 
+        content: any = null, 
         public contentType: string = "") {
             if (content) {
-                this.content = content;
+                this._contentBase64 = btoa(content);
             }
         }
     
+    public loadFromBase64(base64Content: string) {
+        this._contentBase64 = base64Content;
+    }
+
     get content(): any {
-        console.log(`Get: ${this._contentBase64}`);
         return atob(this._contentBase64);
     }
     
     set content(content: any) {
+        if (!!content) {
+            throw Error("Empty content");
+        }
         this._contentBase64 = btoa(content);
-        console.log(`Set: ${content}: ${this._contentBase64}`);
-
     }
 }
 
