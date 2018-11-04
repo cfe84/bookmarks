@@ -123,23 +123,6 @@ class FileBookmarksStorageProviderTest {
         should(updateFile.folders[folder.id].name).equal("folder2");
     }
 
-    @test("should retrieve saved userid")
-    async saveUserId() {
-        // prepare
-        const userId = `${uuid()}`;
-        const systemUserId = `${uuid()}`;
-
-        const provider = new InMemoryFileProvider();
-        const storage = new FileBookmarksStorageProvider(provider);
-        
-        // execute
-        await storage.setUserIdAsync(systemUserId, userId);
-        const newStorage = new FileBookmarksStorageProvider(provider);
-        const retrievedId = await newStorage.getUserIdAsync(systemUserId);
-
-        // test
-        should(retrievedId).equal(userId);
-    }
 
     @test("should save icon and retrieve it")
     async saveAndRetrieveIcon() {

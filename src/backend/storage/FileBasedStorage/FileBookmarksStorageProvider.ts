@@ -8,7 +8,6 @@ import { Asset } from "..";
 
 class FileBookmarksStorageProvider implements IBookmarksStorageProvider, IBookmarksStorageTransaction {
     cache: {[userId: string]: BookmarkFile} = {};
-    USER_STORE_USER_ID = "userids";
         
     async commitAsync(): Promise<void> {
         for (let userId in this.cache) {
@@ -132,23 +131,6 @@ class FileBookmarksStorageProvider implements IBookmarksStorageProvider, IBookma
         private transaction: boolean = false) {
     }
 
-    userCache: {[systemUserId: string]: string} = {};
-    
-    async setUserIdAsync(systemUserId: string, userId: string): Promise<void> {
-        this.userCache[systemUserId] = userId;
-        let asset = new Asset(systemUserId, userId);
-        await this.fileProvider.saveAssetAsync(this.USER_STORE_USER_ID, asset);
-    }
-
-    async getUserIdAsync(systemUserId: string): Promise<string> {
-        if (this.userCache[systemUserId] === undefined) {
-            const userIdAsset = await this.fileProvider.getAssetAsync(this.USER_STORE_USER_ID, systemUserId);
-            const userId = userIdAsset.content;
-            this.userCache[systemUserId] = userId;
-            return userId;
-        }
-        return this.userCache[systemUserId]
-    }
 }
 
 export { FileBookmarksStorageProvider }

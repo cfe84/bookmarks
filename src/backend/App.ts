@@ -6,7 +6,7 @@ import {UserController} from "./controllers/UserController";
 import expressBody from "body-parser";
 import path from "path";
 import { Container } from "./Container";
-import { FileBookmarksStorageProvider, FsFileProvider, IBookmarksStorageProvider, AzureBlobStorageFileProvider, IFileProvider } from "./storage";
+import { FileBookmarksStorageProvider, FileUserStorageProvider, FsFileProvider, IBookmarksStorageProvider, AzureBlobStorageFileProvider, IFileProvider } from "./storage";
 import { IAuthMiddleware, AzureADAuthMiddleware, FakeAuthMiddleware } from "./authentication";
 
 class App {
@@ -27,8 +27,9 @@ class App {
             fileProvider = new FsFileProvider(dataFolder);
         }
         const storageProvider = new FileBookmarksStorageProvider(fileProvider);
+        const userProvider = new FileUserStorageProvider(fileProvider);
         if (process.env.WEBSITE_AUTH_DEFAULT_PROVIDER === 'AzureActiveDirectory') {
-            authMiddleware = new AzureADAuthMiddleware(storageProvider);
+            authMiddleware = new AzureADAuthMiddleware(userProvider);
         } else {
             console.warn("Not auth provider configured, using a fake one");
             authMiddleware = new FakeAuthMiddleware();

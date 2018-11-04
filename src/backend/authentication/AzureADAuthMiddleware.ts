@@ -1,10 +1,10 @@
 import { IAuthMiddleware } from "./IAuthMiddleware";
 import { AuthenticatedUser } from "../models";
-import { IBookmarksStorageProvider } from "../storage";
+import { IUserStorageProvider } from "../storage";
 
 class AzureADAuthMiddleware implements IAuthMiddleware{
 
-    constructor(private storageProvider: IBookmarksStorageProvider) {}
+    constructor(private userStorageProvider: IUserStorageProvider) {}
 
     public authenticate(req: any, res: any, next: any): void {
         if (!req.headers["x-ms-client-principal-name"] 
@@ -14,7 +14,7 @@ class AzureADAuthMiddleware implements IAuthMiddleware{
                 res.end();
             }
         else {
-            this.storageProvider.getUserIdAsync(req.headers["x-ms-client-principal-id"])
+            this.userStorageProvider.getUserIdAsync(req.headers["x-ms-client-principal-id"])
                 .then((userId) => {
                     req.user = new AuthenticatedUser(
                         userId,
