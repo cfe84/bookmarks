@@ -16,7 +16,7 @@ class AzureADAuthMiddlewareTest {
     }
     
     @test("should reject unauthenticated users")
-    rejectUnauthenticatedUsers() {
+    rejectUnauthenticatedUsers(next: any) {
         const req = {
             headers: {
             },
@@ -24,21 +24,15 @@ class AzureADAuthMiddlewareTest {
         }
 
         const res = this.createNewRes();
-        const resMole = new Mole(res);
-        const next = function(){
-            throw Error("Next should not have been called");
-        };
 
         const fileProvider = new InMemoryFileProvider();
         const storageProvider = new FileUserStorageProvider(fileProvider);
         
         const authMiddleware = new AzureADAuthMiddleware(storageProvider);
-        authMiddleware.authenticate(req, res, next);
-
-        should(res.statusCode).equal(401, "should be unauthorized");
-        should(req.user).be.undefined();
-        resMole.verify(obj => obj.json(It.isAny(Error)), Times.atLeast(1));
-        resMole.verify(obj => obj.end(), Times.exact(0));
+        authMiddleware.authenticate(req, res, () => {
+            should(req.user).be.undefined();
+            next();            
+        });
     }
 
     @test("should extract username and id")

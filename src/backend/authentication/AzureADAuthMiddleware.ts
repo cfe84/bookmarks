@@ -7,13 +7,9 @@ class AzureADAuthMiddleware implements IAuthMiddleware{
     constructor(private userStorageProvider: IUserStorageProvider) {}
 
     public authenticate(req: any, res: any, next: any): void {
-        if (!req.headers["x-ms-client-principal-name"] 
-            || !req.headers["x-ms-client-principal-id"]) {
-                res.statusCode = 401;
-                res.json(Error("Authentication headers are missing"));
-                res.end();
-            }
-        else {
+        const easyAuthHeadersArePresent = req.headers["x-ms-client-principal-name"]
+            && req.headers["x-ms-client-principal-id"] ;
+        if ( easyAuthHeadersArePresent ) {
             this.userStorageProvider.getUserIdAsync(req.headers["x-ms-client-principal-id"])
                 .then((userId) => {
                     req.user = new AuthenticatedUser(
@@ -29,6 +25,9 @@ class AzureADAuthMiddleware implements IAuthMiddleware{
                     res.end(); 
                     next();
                 })
+        }
+        else {
+            next();
         }
     }
 }
