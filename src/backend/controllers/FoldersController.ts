@@ -1,5 +1,5 @@
 import { Container } from "../Container";
-import { IStorageProvider } from "../storage";
+import { IBookmarksStorageProvider } from "../storage";
 import { Folder, Bookmark } from "../models";
 import { RequestParameters } from "./RequestParameters";
 import { mapRoute } from "./utils/mapRoute";
@@ -17,7 +17,7 @@ const uuid = require("uuid/v4");
 const ROOT_DIRECTORY: string = "root";
 
 class FoldersController {
-    private storageProvider: IStorageProvider;
+    private storageProvider: IBookmarksStorageProvider;
 
     constructor(private container: Container) {
         this.storageProvider = container.storageProvider;

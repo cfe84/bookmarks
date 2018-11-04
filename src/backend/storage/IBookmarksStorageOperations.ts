@@ -1,6 +1,6 @@
 import { Folder, Bookmark, Icon } from "../models";
 
-interface IStorageOperations {
+interface IBookmarksStorageOperations {
     setUserIdAsync(systemUserId: string, userId: string): Promise<void>;
     getUserIdAsync(systemUserId: string): Promise<string>;
     getSubfoldersAsync(userId: string, folderId: string): Promise<Array<Folder>>;
@@ -15,4 +15,4 @@ interface IStorageOperations {
     deleteBookmarkAsync(userId: string, bookmark: Bookmark): Promise<void>;
 }
 
-export { IStorageOperations }
+export { IBookmarksStorageOperations }

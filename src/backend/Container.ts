@@ -1,4 +1,4 @@
-import { IStorageProvider } from "./storage";
+import { IBookmarksStorageProvider } from "./storage";
 import { IAuthMiddleware } from "./authentication";
 
 class Container {
@@ -11,7 +11,7 @@ class Container {
     }
 
     constructor(
-        public storageProvider: IStorageProvider,
+        public storageProvider: IBookmarksStorageProvider,
         public authMiddleware: IAuthMiddleware
     ) { }
 

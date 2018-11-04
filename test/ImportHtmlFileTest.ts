@@ -1,6 +1,6 @@
 import { suite, test,  } from "mocha-typescript";
 import { ImportHtmlFileCommand } from "../src/backend/commands/ImportHtmlFileCommand";
-import { FileStorageProvider, InMemoryFileProvider } from "../src/backend/storage";
+import { FileBookmarksStorageProvider, InMemoryFileProvider } from "../src/backend/storage";
 import fs from "fs";
 import path from "path";
 import { BookmarkFile } from "../src/backend/storage/FileBasedStorage/BookmarkFile";
@@ -21,7 +21,7 @@ class ImportHtmlFileTest {
         const command = new ImportHtmlFileCommand("userid", "root", fileContent, true);
         const fileProvider = new InMemoryFileProvider();
         await fileProvider.saveBookmarkFileAsync("userid", new BookmarkFile(true));
-        const storageProvider = new FileStorageProvider(fileProvider);
+        const storageProvider = new FileBookmarksStorageProvider(fileProvider);
         const authMiddleware = new FakeAuthMiddleware();
         await command.executeAsync({storageProvider, authMiddleware} as Container);
 

@@ -1,18 +1,18 @@
 import { IFileProvider } from "./FileBasedStorage/IFileProvider";
 import { FsFileProvider } from "./FileBasedStorageImplementations/FsFileProvider";
 import { InMemoryFileProvider } from "./FileBasedStorageImplementations/InMemoryFileProvider";
-import { IStorageProvider } from "./IStorageProvider";
-import { FileStorageProvider } from "./FileBasedStorage/FileStorageProvider";
+import { IBookmarksStorageProvider } from "./IBookmarksStorageProvider";
+import { FileBookmarksStorageProvider } from "./FileBasedStorage/FileBookmarksStorageProvider";
 import { JsonSerializer } from "./FileBasedStorage/JsonSerializer";
 import { AzureBlobStorageFileProvider } from "./FileBasedStorageImplementations/AzureBlobStorageFileProvider";
 import { Asset } from "./FileBasedStorage/Asset";
 
 export {
     IFileProvider,
-    IStorageProvider,
+    IBookmarksStorageProvider,
     FsFileProvider,
     InMemoryFileProvider,
-    FileStorageProvider,
+    FileBookmarksStorageProvider,
     JsonSerializer, 
     AzureBlobStorageFileProvider,
     Asset

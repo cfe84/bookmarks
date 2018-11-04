@@ -3,7 +3,7 @@ import should from "should";
 import { Mole, Times, It } from "moqjs";
 import { AzureADAuthMiddleware } from "../src/backend/authentication/AzureADAuthMiddleware";
 import { Container } from "../src/backend/Container";
-import { InMemoryFileProvider, FileStorageProvider } from "../src/backend/storage";
+import { InMemoryFileProvider, FileBookmarksStorageProvider } from "../src/backend/storage";
 const uuid = require("uuid/v4");
 
 @suite
@@ -31,7 +31,7 @@ class AzureADAuthMiddlewareTest {
         };
 
         const fileProvider = new InMemoryFileProvider();
-        const storageProvider = new FileStorageProvider(fileProvider);
+        const storageProvider = new FileBookmarksStorageProvider(fileProvider);
         
         const authMiddleware = new AzureADAuthMiddleware(storageProvider);
         authMiddleware.authenticate(req, res, next);
@@ -59,7 +59,7 @@ class AzureADAuthMiddlewareTest {
         const res = { statusCode: 0 };
 
         const fileProvider = new InMemoryFileProvider();
-        const storageProvider = new FileStorageProvider(fileProvider);
+        const storageProvider = new FileBookmarksStorageProvider(fileProvider);
 
         const userId = `${uuid()}`;
         storageProvider.setUserIdAsync("myId", userId)
@@ -93,7 +93,7 @@ class AzureADAuthMiddlewareTest {
         const res = this.createNewRes();
 
         const fileProvider = new InMemoryFileProvider();
-        const storageProvider = new FileStorageProvider(fileProvider);
+        const storageProvider = new FileBookmarksStorageProvider(fileProvider);
 
         const authMiddleware = new AzureADAuthMiddleware(storageProvider);
         authMiddleware.authenticate(req, res, () => {

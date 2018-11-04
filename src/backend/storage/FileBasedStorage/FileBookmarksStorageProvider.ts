@@ -1,12 +1,12 @@
-import { IStorageProvider } from "../IStorageProvider";
-import { IStorageTransaction } from "../IStorageTransaction";
+import { IBookmarksStorageProvider } from "../IBookmarksStorageProvider";
+import { IBookmarksStorageTransaction } from "../IBookmarksStorageTransaction";
 import { IItem } from "../../models/IItem";
 import { Folder, Bookmark, Icon } from "../../models";
 import { IFileProvider } from "./IFileProvider";
 import { BookmarkFile } from "./BookmarkFile";
 import { Asset } from "..";
 
-class FileStorageProvider implements IStorageProvider, IStorageTransaction {
+class FileBookmarksStorageProvider implements IBookmarksStorageProvider, IBookmarksStorageTransaction {
     cache: {[userId: string]: BookmarkFile} = {};
     USER_STORE_USER_ID = "userids";
         
@@ -17,8 +17,8 @@ class FileStorageProvider implements IStorageProvider, IStorageTransaction {
         this.cache = {};
     }
 
-    async beginTransactionAsync(): Promise<IStorageTransaction> {
-        const txn = new FileStorageProvider(this.fileProvider, true);
+    async beginTransactionAsync(): Promise<IBookmarksStorageTransaction> {
+        const txn = new FileBookmarksStorageProvider(this.fileProvider, true);
         return txn;
     }
 
@@ -151,4 +151,4 @@ class FileStorageProvider implements IStorageProvider, IStorageTransaction {
     }
 }
 
-export { FileStorageProvider }
+export { FileBookmarksStorageProvider }

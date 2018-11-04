@@ -1,5 +1,5 @@
 import { Container } from "../Container";
-import { IStorageProvider } from "../storage";
+import { IBookmarksStorageProvider } from "../storage";
 import { Folder, Bookmark, Icon } from "../models";
 import { RequestParameters } from "./RequestParameters";
 import { mapRoute } from "./utils/mapRoute";
@@ -8,7 +8,7 @@ import { SaveBookmarkCommand } from "../commands";
 const ROOT_DIRECTORY: string = "root";
 
 class BookmarksController {
-    private storageProvider: IStorageProvider;
+    private storageProvider: IBookmarksStorageProvider;
 
     constructor(private container: Container) {
         this.storageProvider = container.storageProvider;

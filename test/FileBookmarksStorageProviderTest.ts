@@ -1,18 +1,18 @@
 import { suite, test, skip,  } from "mocha-typescript";
 import should from "should";
-import { FileStorageProvider, InMemoryFileProvider, IStorageProvider } from "../src/backend/storage";
+import { FileBookmarksStorageProvider, InMemoryFileProvider, IBookmarksStorageProvider } from "../src/backend/storage";
 import { Folder, Bookmark, Icon } from "../src/backend/models";
 const uuid = require("uuid/v4");
 
 @suite
-class FileStorageProviderTest {
+class FileBookmarksStorageProviderTest {
     private testFolderName: string = "Folder Name";
     private testDescription: string = "Description";
 
 
     @test("should save and open a sub-folder")
     async saveAndOpenFolder() {
-        const provider = new FileStorageProvider(new InMemoryFileProvider());
+        const provider = new FileBookmarksStorageProvider(new InMemoryFileProvider());
 
         const userId = uuid();
         const folder = new Folder(this.testFolderName);
@@ -29,7 +29,7 @@ class FileStorageProviderTest {
 
     @test("should save and open a bookmark")
     async saveAndOpenBookmark() {
-        const provider = new FileStorageProvider(new InMemoryFileProvider());
+        const provider = new FileBookmarksStorageProvider(new InMemoryFileProvider());
         const userId = uuid();
         const folderId = uuid();
         const bookmark = new Bookmark(this.testFolderName, "href");
@@ -54,7 +54,7 @@ class FileStorageProviderTest {
         const bookmark2 = new Bookmark("name 2", "bookmark 2");
         folder.bookmarkIds = [bookmark1.id, bookmark2.id];
 
-        const provider = new FileStorageProvider(new InMemoryFileProvider());
+        const provider = new FileBookmarksStorageProvider(new InMemoryFileProvider());
         await provider.saveBookmarkAsync(userId, bookmark1);
         await provider.saveBookmarkAsync(userId, bookmark2);
         await provider.saveFolderAsync(userId, folder);
@@ -67,7 +67,7 @@ class FileStorageProviderTest {
 
     @test("should delete bookmarks and not list them")
     async deleteBookmarks() {
-        const provider = new FileStorageProvider(new InMemoryFileProvider());
+        const provider = new FileBookmarksStorageProvider(new InMemoryFileProvider());
         const userId = uuid();
         const folderId = uuid();
         const bookmark = new Bookmark(this.testFolderName, "href");
@@ -82,7 +82,7 @@ class FileStorageProviderTest {
 
     @test("should delete and not list folder")
     async deleteFolders() {
-        const provider = new FileStorageProvider(new InMemoryFileProvider());
+        const provider = new FileBookmarksStorageProvider(new InMemoryFileProvider());
         const userId = uuid();
         const folder = new Folder(this.testFolderName);
         await provider.saveFolderAsync(userId, folder);
@@ -96,7 +96,7 @@ class FileStorageProviderTest {
     @test("should update transactions only after commit")
     async transaction() {
         const provider = new InMemoryFileProvider();
-        const storage = new FileStorageProvider(provider);
+        const storage = new FileBookmarksStorageProvider(provider);
         const bookmark = new Bookmark("name1", "href1");
         const folder = new Folder("folder1");
         const user = "sldfks";
@@ -130,11 +130,11 @@ class FileStorageProviderTest {
         const systemUserId = `${uuid()}`;
 
         const provider = new InMemoryFileProvider();
-        const storage = new FileStorageProvider(provider);
+        const storage = new FileBookmarksStorageProvider(provider);
         
         // execute
         await storage.setUserIdAsync(systemUserId, userId);
-        const newStorage = new FileStorageProvider(provider);
+        const newStorage = new FileBookmarksStorageProvider(provider);
         const retrievedId = await newStorage.getUserIdAsync(systemUserId);
 
         // test
@@ -144,7 +144,7 @@ class FileStorageProviderTest {
     @test("should save icon and retrieve it")
     async saveAndRetrieveIcon() {
         const provider = new InMemoryFileProvider();
-        const storage: IStorageProvider = new FileStorageProvider(provider);
+        const storage: IBookmarksStorageProvider = new FileBookmarksStorageProvider(provider);
 
         const icon = new Icon("sdflksflgde", "contentType");
         await storage.saveIconAsync("1234", icon);

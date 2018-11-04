@@ -6,14 +6,14 @@ import {UserController} from "./controllers/UserController";
 import expressBody from "body-parser";
 import path from "path";
 import { Container } from "./Container";
-import { FileStorageProvider, FsFileProvider, IStorageProvider, AzureBlobStorageFileProvider, IFileProvider } from "./storage";
+import { FileBookmarksStorageProvider, FsFileProvider, IBookmarksStorageProvider, AzureBlobStorageFileProvider, IFileProvider } from "./storage";
 import { IAuthMiddleware, AzureADAuthMiddleware, FakeAuthMiddleware } from "./authentication";
 
 class App {
     app: any;
 
     private inject(): Container {
-        let storage: IStorageProvider;
+        let storage: IBookmarksStorageProvider;
         let fileProvider: IFileProvider;
         let authMiddleware: IAuthMiddleware;
         if (process.env.STORAGE_CONNECTION_STRING) {
@@ -26,7 +26,7 @@ class App {
             }
             fileProvider = new FsFileProvider(dataFolder);
         }
-        const storageProvider = new FileStorageProvider(fileProvider);
+        const storageProvider = new FileBookmarksStorageProvider(fileProvider);
         if (process.env.WEBSITE_AUTH_DEFAULT_PROVIDER === 'AzureActiveDirectory') {
             authMiddleware = new AzureADAuthMiddleware(storageProvider);
         } else {
