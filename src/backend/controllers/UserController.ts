@@ -9,7 +9,7 @@ class UserController {
     
     setRoutes(app: any) {
         const baseRoute = "/api/users";
-        app.get(`${baseRoute}/:me`, mapRoute(this.getMe.bind(this)));
+        app.get(`${baseRoute}/:me`, mapRoute(this.getMe.bind(this), false));
     }
     
     async getMe(requestParameters: RequestParameters): Promise<AuthenticatedUser> {

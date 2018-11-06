@@ -41,6 +41,7 @@ class AzureADAuthMiddlewareTest {
             headers: {
                 "x-ms-client-principal-name": "myName",
                 "x-ms-client-principal-id": "myId",
+                "x-ms-client-principal-idp": "aad",
             },
             user: {
                 id: undefined,
@@ -76,11 +77,7 @@ class AzureADAuthMiddlewareTest {
                 "x-ms-client-principal-name": "myName",
                 "x-ms-client-principal-id": "myId",
             },
-            user: {
-                id: undefined,
-                name: undefined,
-                something: true
-            }
+            user: null
         };
 
         const res = this.createNewRes();
@@ -90,8 +87,11 @@ class AzureADAuthMiddlewareTest {
 
         const authMiddleware = new AzureADAuthMiddleware(storageProvider);
         authMiddleware.authenticate(req, res, () => {
-            should(res.statusCode).equal(403, "should be forbidden");
+            should(res.statusCode).equal(0);
+            should(req.user).be.null();
             next();
         });
     }
+
+
 }

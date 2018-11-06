@@ -7,11 +7,11 @@
             <div class="option">
                 <h1>Login</h1>
 
-                <a class="login-option w3-button" href=".auth/login/microsoftaccount">
+                <a class="login-option w3-button" href=".auth/login/microsoftaccount?post_login_redirect_uri=/">
                     <i class="fab fa-microsoft"></i>
                     Microsoft
                 </a>
-                <a class="login-option w3-button" href=".auth/login/aad">
+                <a class="login-option w3-button" href=".auth/login/aad?post_login_redirect_uri=/">
                     <i class="fab fa-microsoft"></i>
                     Work
                 </a>
@@ -19,16 +19,16 @@
 
             <div class="option">
                 <h1>Register</h1>
-            </div>
-
-                <a class="login-option w3-button" href=".auth/login/microsoft">
+                You will be able to add another option to log-in later.
+                <a class="login-option w3-button" href=".auth/login/microsoft?post_login_redirect_uri=/register">
                     <i class="fab fa-microsoft"></i>
                     Microsoft
                 </a>
-                <a class="login-option w3-button" href=".auth/login/aad">
+                <a class="login-option w3-button" href=".auth/login/aad?post_login_redirect_uri=/register">
                     <i class="fab fa-microsoft"></i>
                     Work
                 </a>
+            </div>
         </div>
     </div>
 </template>

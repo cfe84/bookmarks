@@ -33,12 +33,22 @@ function CallBackendAsync(apiUrl,
     })
 }
 
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
 const apiOperations = {
     getRootFolder: () => CallBackendAsync(`/folders`),
     getSubfolders: (parentFolderId) => CallBackendAsync(`/folders/${parentFolderId}/folders`),
     getBookmarks: (parentFolderId) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks`),
     getUserInfo: (anonymous = false) => CallBackendAsync(`/users/me`, "GET", null, null,
-        anonymous 
+        getParameterByName("anonymous") === "true" 
             ? [{header: "anonymous", value: "true"}] 
             : []),
     postBookmark: (parentFolderId, bookmark) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks`, 
@@ -54,7 +64,8 @@ const apiOperations = {
     deleteBookmark: (parentFolderId, bookmark) => CallBackendAsync(`/folders/${parentFolderId}/bookmarks/${bookmark.id}`, 
         "DELETE", JSON.stringify(bookmark)),
     uploadHtml: (parentFolderId, content) => CallBackendAsync(`/folders/${parentFolderId}`,
-        "POST", content, "text/html")
+        "POST", content, "text/html"),
+    postUser: () => CallBackendAsync(`/users/`, "POST", "{}", "application/json")
 };
 
 export default apiOperations;
