@@ -5,3 +5,5 @@ class SystemUser {
     public issuer: string = "";
     public identityProvider: string = "";
 }
+
+export { SystemUser }

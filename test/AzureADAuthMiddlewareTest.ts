@@ -15,12 +15,13 @@ class AzureADAuthMiddlewareTest {
         };
     }
     
-    @test("should reject unauthenticated users")
-    rejectUnauthenticatedUsers(next: any) {
+    @test("should ignore unauthenticated users")
+    ignoreUnauthenticatedUsers(next: any) {
         const req = {
             headers: {
             },
-            user: undefined
+            user: undefined,
+            systemUser: undefined
         }
 
         const res = this.createNewRes();
@@ -31,6 +32,7 @@ class AzureADAuthMiddlewareTest {
         const authMiddleware = new AzureADAuthMiddleware(storageProvider);
         authMiddleware.authenticate(req, res, () => {
             should(req.user).be.undefined();
+            should(req.systemUser).be.undefined();
             next();            
         });
     }
@@ -46,7 +48,13 @@ class AzureADAuthMiddlewareTest {
             user: {
                 id: undefined,
                 name: undefined,
-                something: true
+                something: true,
+            },
+            systemUser: {
+                id: undefined,
+                name: undefined,
+                idp: undefined,
+                something: true,
             }
         };
 
@@ -64,6 +72,9 @@ class AzureADAuthMiddlewareTest {
                 should(req.user.something).be.undefined();
                 should(req.user.id).equal(userId);        
                 should(req.user.name).equal("myName");
+                should(req.systemUser.id).equal("myId");
+                should(req.systemUser.name).equal("myName");        
+                should(req.systemUser.idp).equal("aad");
                 next();
             });
         })
@@ -77,7 +88,12 @@ class AzureADAuthMiddlewareTest {
                 "x-ms-client-principal-name": "myName",
                 "x-ms-client-principal-id": "myId",
             },
-            user: null
+            user: null,
+            systemUser: {
+                id: null,
+                name: null,
+                idp: null
+            }
         };
 
         const res = this.createNewRes();
@@ -89,6 +105,9 @@ class AzureADAuthMiddlewareTest {
         authMiddleware.authenticate(req, res, () => {
             should(res.statusCode).equal(0);
             should(req.user).be.null();
+            should(req.systemUser.id).equal("myId");
+            should(req.systemUser.name).equal("myName");        
+            should(req.systemUser.idp).equal("aad");
             next();
         });
     }
