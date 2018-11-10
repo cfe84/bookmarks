@@ -14,7 +14,7 @@ class AzureADAuthMiddleware implements IAuthMiddleware{
         if ( easyAuthHeadersArePresent ) {
             req.systemUser = new SystemUser();
             req.systemUser.id = principalId;
-            req.systemUser.idp = idp;
+            req.systemUser.identityProvider = idp;
             req.systemUser.name = principalName;
 
             this.userStorageProvider.getUserIdAsync(principalId)

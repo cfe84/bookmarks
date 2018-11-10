@@ -1,6 +1,5 @@
 import { suite, test, skip,  } from "mocha-typescript";
 import should from "should";
-import { Mole, Times, It } from "moqjs";
 import { AzureADAuthMiddleware } from "../src/backend/authentication/AzureADAuthMiddleware";
 import { InMemoryFileProvider, FileUserStorageProvider } from "../src/backend/storage";
 const uuid = require("uuid/v4");
@@ -53,7 +52,7 @@ class AzureADAuthMiddlewareTest {
             systemUser: {
                 id: undefined,
                 name: undefined,
-                idp: undefined,
+                identityProvider: undefined,
                 something: true,
             }
         };
@@ -74,7 +73,7 @@ class AzureADAuthMiddlewareTest {
                 should(req.user.name).equal("myName");
                 should(req.systemUser.id).equal("myId");
                 should(req.systemUser.name).equal("myName");        
-                should(req.systemUser.idp).equal("aad");
+                should(req.systemUser.identityProvider).equal("aad");
                 next();
             });
         })
@@ -86,13 +85,14 @@ class AzureADAuthMiddlewareTest {
         const req = {
             headers: {
                 "x-ms-client-principal-name": "myName",
+                "x-ms-client-principal-idp": "aad",
                 "x-ms-client-principal-id": "myId",
             },
             user: null,
             systemUser: {
                 id: null,
                 name: null,
-                idp: null
+                identityProvider: null
             }
         };
 
@@ -105,9 +105,11 @@ class AzureADAuthMiddlewareTest {
         authMiddleware.authenticate(req, res, () => {
             should(res.statusCode).equal(0);
             should(req.user).be.null();
+            console.log(req.systemUser);
+
             should(req.systemUser.id).equal("myId");
             should(req.systemUser.name).equal("myName");        
-            should(req.systemUser.idp).equal("aad");
+            should(req.systemUser.identityProvider).equal("aad");
             next();
         });
     }

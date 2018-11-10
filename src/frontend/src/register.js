@@ -4,8 +4,8 @@ window.register = () => {
     operations
         .postUser()
         .then(() => {
-            const server = /^([^\/]+\/\/[^\/]+)\/.+$/.exec(window.location)[1];
-            window.location = server;
+            const serverRoot = /^([^\/]+\/\/[^\/]+)\/.+$/.exec(window.location)[1];
+            window.location = serverRoot;
         })
         .catch((error) => {
             document.getElementById("error").innerHTML = error;
